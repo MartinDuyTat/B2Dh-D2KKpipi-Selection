@@ -15,31 +15,35 @@ class BaseCuts {
      * Default constructor with a few options, which are true by default
      * @param
      */
-    BaseCuts(bool BachelorCuts = true, bool KaonDaugtherCuts = true, DecayTreeFitCuts = true, DMassCut = true, LoosePIDCuts = true);
+    BaseCuts(bool BachelorCuts = true, bool KaonDaugtherCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCut = true);
     /**
      * Base cuts on bachelor particle
      */
-    TCut BachelorCuts();
+    TCut BachelorCuts() const;
     /**
      * Cuts on the Kaon daughter cuts
      */
-    TCut KaonDaughterCuts();
+    TCut KaonDaughterCuts() const;
     /**
      * Cut on DecayTreeFit convergence
      */
-    TCut DecayTreeFitCut();
+    TCut DecayTreeFitCut() const;
     /**
      * Cut on \f$D\f$ mass
      */
-    TCut DMassCut();
+    TCut DMassCut() const;
     /**
      * Loose PID cuts
      */
-    TCut LoosePIDCuts();
+    TCut LoosePIDCuts() const;
+    /** 
+     * Cut on \f$B\f$ mass after running DecayTreeFitter
+     */
+    TCut BMassCut() const;
     /**
      * Apply all activated cuts
      */
-    TCut ApplyBaseCuts();
+    TCut ApplyBaseCuts() const;
   private:
     /**
      * Flag for bachelor particle cuts
