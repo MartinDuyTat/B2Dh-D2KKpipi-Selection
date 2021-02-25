@@ -39,11 +39,11 @@ class BaseCuts {
     /** 
      * Cut on \f$B\f$ mass after running DecayTreeFitter
      */
-    TCut BMassCut() const;
+    virtual TCut BMassCut() const;
     /**
      * Apply all activated cuts
      */
-    TCut ApplyBaseCuts() const;
+    virtual TCut ApplyBaseCuts() const;
   private:
     /**
      * Flag for bachelor particle cuts
