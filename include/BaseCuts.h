@@ -13,9 +13,16 @@ class BaseCuts {
   public:
     /**
      * Default constructor with a few options, which are true by default
-     * @param
+     * @param Year Year of dataset
+     * @param BachelorCuts Set to true to apply cuts on bachelor particle
+     * @param KaonDaughterCuts Set to true to apply cuts on Kaon daugthers
+     * @param DecayTreeFitCuts Set to true to apply cuts on DecayTreeFitter convergence
+     * @param DMassCut Set to true to apply cuts on \f$D\f$ mass
+     * @param LoosePIDCuts Set to true to apply loose PID cuts
+     * @param TriggerCuts Set to true to apply trigger requirements
+     * @param BMassCut Set to true to apply cuts on \f$B\f$ mass
      */
-    BaseCuts(bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCut = true);
+  BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
     /**
      * Base cuts on bachelor particle
      */
@@ -36,6 +43,10 @@ class BaseCuts {
      * Loose PID cuts
      */
     TCut LoosePIDCuts() const;
+    /**
+     * Trigger cuts
+     */
+    TCut TriggerCuts() const;
     /** 
      * Cut on \f$B\f$ mass after running DecayTreeFitter
      */
@@ -45,6 +56,10 @@ class BaseCuts {
      */
     virtual TCut ApplyBaseCuts() const;
   private:
+    /**
+     * Year dataset was taken
+     */
+    bool m_Year;
     /**
      * Flag for bachelor particle cuts
      */
@@ -65,6 +80,10 @@ class BaseCuts {
      * Flag for loose PID cuts
      */
     bool m_LoosePIDCuts;
+    /**
+     * Flag for trigger cuts
+     */
+    bool m_TriggerCuts;
     /**
      * Flag for \f$D\f$ mass cut
      */

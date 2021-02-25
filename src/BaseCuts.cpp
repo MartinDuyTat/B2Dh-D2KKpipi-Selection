@@ -3,7 +3,7 @@
 #include"BaseCuts.h"
 #include"TCut.h"
 
-BaseCuts::BaseCuts(bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCut): m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCuts(DecayTreeFitCuts), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_BMassCuts(BMassCuts) {
+BaseCuts::BaseCuts(bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCuts(DecayTreeFitCuts), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCuts(BMassCuts) {
 }
 
 TCut BaseCuts::BachelorCuts() const {
@@ -24,6 +24,20 @@ TCut BaseCuts::DMassCut() const {
 
 TCut BaseCuts::LoosePIDCuts() const {
   return TCut("h1_PIDK > -5 && h2_PIDK > -5 && h3_PIDK < 20 && h4_PIDK < 20");
+}
+
+TCut BaseCuts::TriggerCuts() const {
+  if(m_Year <= 2012) {
+    return TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
+                "(Bu_Hlt1TrackAllL0Decision_TOS == 1 ) && "
+	        "(Bu_Hlt2Topo2BodyBBDTDecision_TOS == 1 || Bu_Hlt2Topo3BodyBBDTDecision_TOS == 1 || Bu_Hlt2Topo4BodyBBDTDecision_TOS == 1)");
+  } else if (m_Year >= 2015 && m_Year <= 2018) {
+    return TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
+                "(Bu_Hlt1TrackMVADecision_TOS == 1 || Bu_Hlt1TwoTrackMVADecision_TOS == 1) && "
+	        "(Bu_Hlt2Topo2BodyDecision_TOS == 1 || Bu_Hlt2Topo3BodyDecision_TOS == 1 || Bu_Hlt2Topo4BodyDecision_TOS == 1)");
+  } else {
+    return TCut();
+  }
 }
 
 TCut BaseCuts::BMassCut() const {
