@@ -1,4 +1,4 @@
-// Martin Duy Tat 25th Februrary 2021
+// Martin Duy Tat 25th February 2021
 /**
  * BaseCuts is a class with the most common cuts used in B selection
  * The user can either apply each cut one by one or call the ApplyBaseCuts member function, which applies all the ones activated
@@ -15,7 +15,7 @@ class BaseCuts {
      * Default constructor with a few options, which are true by default
      * @param
      */
-    BaseCuts(bool BachelorCuts = true, bool KaonDaugtherCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCut = true);
+    BaseCuts(bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCut = true);
     /**
      * Base cuts on bachelor particle
      */
@@ -65,4 +65,8 @@ class BaseCuts {
      * Flag for loose PID cuts
      */
     bool m_LoosePIDCuts;
+    /**
+     * Flag for \f$D\f$ mass cut
+     */
+    bool m_BMassCut;
 };
