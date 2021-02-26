@@ -10,6 +10,6 @@ TCut HighBMassCuts::BMassCut() const {
   return TCut("Bu_constD0PV_M > 5800 && Bu_constD0PV_M < 7000");
 }
 
-TCut HighBMassCuts::ApplyCuts() const {
+TCut HighBMassCuts::GetCuts() const {
   return BMassCut() && BaseCuts::ApplyCuts();
 }

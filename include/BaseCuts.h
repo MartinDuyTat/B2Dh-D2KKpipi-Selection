@@ -52,9 +52,9 @@ class BaseCuts {
      */
     virtual TCut BMassCut() const;
     /**
-     * Apply all activated cuts
+     * Get all activated cuts as a TCut object
      */
-    virtual TCut ApplyBaseCuts() const;
+    virtual TCut GetCuts() const;
   private:
     /**
      * Year dataset was taken

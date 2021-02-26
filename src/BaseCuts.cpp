@@ -44,7 +44,7 @@ TCut BaseCuts::BMassCut() const {
   return TCut("Bu_constD0PV_M > 5080 && Bu_constD0PV_M < 7000");
 }
 
-TCut BaseCuts::ApplyBaseCuts() const {
+TCut BaseCuts::GetCuts() const {
   TCut Cuts;
   if(m_BachelorCuts) {
     Cuts = Cuts && BachelorCuts();

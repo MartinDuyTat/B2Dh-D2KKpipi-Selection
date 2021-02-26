@@ -20,7 +20,7 @@ class HighBMassCut: public BaseCuts {
      */
     virtual TCut BMassCut() const;
     /**
-     * Apply all activated cuts
+     * Get all activated cuts as a TCut object
      */
-    viritual TCut ApplyCuts() const;
+    viritual TCut GetCuts() const;
 };
