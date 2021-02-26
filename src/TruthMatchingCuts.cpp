@@ -24,7 +24,7 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
                "(abs(h4_MC_MOTHER_ID)    == 0 || abs(h4_MC_MOTHER_ID)    == 421) && " 
                "(abs(h4_MC_GD_MOTHER_ID) == 0 || abs(h4_MC_GD_MOTHER_ID) == 521)");
   TCut BachTruth;
-  if(m_DecayMode == "Pi") {
+  if(m_DecayMode == "pi") {
     BachTruth = BachTruth && TCut("(abs(Bach_TRUEID)          == 0 || abs(Bach_TRUEID)          == 211) && "
                                   "(abs(Bach_MC_MOTHER_ID)    == 0 || abs(Bach_MC_MOTHER_ID)    == 521)";
   } else if(m_DecayMode "K") {

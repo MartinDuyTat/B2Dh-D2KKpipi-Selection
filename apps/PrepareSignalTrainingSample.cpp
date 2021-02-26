@@ -4,7 +4,7 @@
  * The cuts applied are the standard base cuts and MC truth matching cuts
  * @param 1 Number of input files
  * @param 2 If there's a single input file, input full path name, otherwise input the path name without the number and file extension (e.g. if filenames are myfile0.root, myfile1.root, etc input myfile)
- * @param 3 Input "Pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
+ * @param 3 Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
  * @param 4 Year of dataset
  * @param 5 Filename of output ROOT file
  */
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   std::cout << "Preparing signal training sample from an MC sample from DaVinci\n";
   std::cout << "Initializing TChain...";
   TChain *Chain;
-  if(std::strcmp(argv[3], "Pi")) {
+  if(std::strcmp(argv[3], "pi")) {
     Chain = new TChain("B2DPi_D2KKPiPi/DecayTree");
   } else if(std::strcmp(argv[3], "K")) {
     Chain = new TChain("B2DK_D2KKPiPi/DecayTree");

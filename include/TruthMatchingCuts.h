@@ -27,7 +27,7 @@ class TruthMatchingCuts: public BaseCuts {
     virtual TCut GetCuts() const;
   private:
     /**
-     * "Pi" for \f$B\to D\pi$ and "K" for \f$B\to DK\f$
+     * "pi" for \f$B\to D\pi$ and "K" for \f$B\to DK\f$
      */
     std::string m_DecayMode;
 };
