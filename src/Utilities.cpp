@@ -2,7 +2,9 @@
 
 #include<string>
 #include<iostream>
+#include<fstream>
 #include"TChain.h"
+#include"TString.h"
 #include"TMVA/DataLoader.h"
 #include"BaseCuts.h"
 #include"TruthMatchingCuts.h"
@@ -49,29 +51,15 @@ namespace Utilities {
     }
   }
 
-  void LoadTrainingVariables(TMVA::DataLoader *DataLoader) {
-    DataLoader->AddVariable("Bu_PTASY_1.5",'F');
-    DataLoader->AddVariable("log(Bach_PT)", 'F');
-    DataLoader->AddVariable("log(Bu_RHO_BPV)", 'F');
-    DataLoader->AddVariable("log(1 - Bu_DIRA_BPV)", 'F');
-    DataLoader->AddVariable("log(1 - D0_DIRA_BPV)", 'F');
-    DataLoader->AddVariable("log(D0_RHO_BPV)", 'F');
-    DataLoader->AddVariable("log(Bu_P)", 'F');
-    DataLoader->AddVariable("log(Bu_PT)", 'F');
-    DataLoader->AddVariable("log(Bu_FDCHI2_OWNPV)", 'F');
-    DataLoader->AddVariable("log(Bu_IPCHI2_OWNPV)", 'F');
-    DataLoader->AddVariable("Bu_MAXDOCA", 'F');
-    DataLoader->AddVariable("log(Bach_P)", 'F');
-    DataLoader->AddVariable("log(Bach_IPCHI2_OWNPV)", 'F');
-    DataLoader->AddVariable("log(D0_IPCHI2_OWNPV)", 'F');
-    DataLoader->AddVariable("log(min(h1_IPCHI2_OWNPV, h2_IPCHI2_OWNPV))", 'F');
-    DataLoader->AddVariable("log(min(h3_IPCHI2_OWNPV, h4_IPCHI2_OWNPV))", 'F');
-    DataLoader->AddVariable("log(max(h1_P, h2_P))", 'F');
-    DataLoader->AddVariable("log(max(h3_P, h4_P))", 'F');
-    DataLoader->AddVariable("D0_MAXDOCA", 'F');
-    DataLoader->AddVariable("log(max(h1_PT, h2_PT))", 'F');
-    DataLoader->AddVariable("log(max(h3_PT, h4_PT))", 'F');
-    DataLoader->AddVariable("BDToutput", 'F');
+  void LoadTrainingVariables(TMVA::DataLoader *DataLoader, std::string Filename) {
+    std::ifstream TrainingVariablesFile(Filename);
+    if(TrainingVariablesFile.is_open()) {
+      std::string line;
+      while(std::getline(TrainingVariablesFile, line)) {
+	DataLoader->AddVariable(TString(line), 'F');
+      }
+      TrainingVariablesFile.close();
+    }
     return;
   }
 

@@ -26,6 +26,7 @@ namespace Utilities {
   /**
    * LoadTrainingVariables is a function that loads all the training variables for the BDT, to change the variables used in BDT training please change this function
    * @param DataLoader DataLoader object that is used for the BDT training
+   * @param Filename Filename of text file with training variables
    */
-  void LoadTrainingVariables(TMVA::DataLoader *DataLoader);
+  void LoadTrainingVariables(TMVA::DataLoader *DataLoader, std::string Filename);
 }
