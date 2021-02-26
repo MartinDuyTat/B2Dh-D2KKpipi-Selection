@@ -5,6 +5,7 @@
 #include<string>
 #include<memory>
 #include"TChain.h"
+#include"TMVA/DataLoader.h"
 #include"BaseCuts.h"
 
 namespace Utilities {
@@ -22,4 +23,9 @@ namespace Utilities {
    * @return A smart pointer with the cut object
    */
   std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, std::string DecayMode, int Year);
+  /**
+   * LoadTrainingVariables is a function that loads all the training variables for the BDT, to change the variables used in BDT training please change this function
+   * @param DataLoader DataLoader object that is used for the BDT training
+   */
+  void LoadTrainingVariables(TMVA::DataLoader *DataLoader);
 }

@@ -2,4 +2,4 @@ add_library(B2DhD2KKPiPiSelection ApplyCuts.cpp BaseCuts.cpp HighBMassCut.cpp Tr
 
 target_include_directories(B2DhD2KKPiPiSelection PUBLIC ../include)
 
-target_link_libraries(B2DhD2KKPiPiSelection PUBLIC ROOT::Physics ROOT::Minuit2 ROOT::Gpad)
+target_link_libraries(B2DhD2KKPiPiSelection PUBLIC ROOT::Physics ROOT::TMVA)
