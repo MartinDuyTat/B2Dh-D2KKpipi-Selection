@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
   TTree *OutputTree = applyCuts(&Chain);
   std::cout << "TTree with selection ready...\n";
   std::cout << "Saving file...\n";
+  OutputTree->SetDirectory(0);
   OutputTree->Write();
   OutputFile.Close();
   std::cout << "TTree with selection saved to file\n";
