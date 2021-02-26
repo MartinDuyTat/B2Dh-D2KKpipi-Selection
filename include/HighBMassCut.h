@@ -4,8 +4,8 @@
  * Mainly used for selection candidates in the background training sample
  */
 
-#ifndef HIGHMASSCUT
-#define HIGHMASSCUT
+#ifndef HIGHBMASSCUT
+#define HIGHBMASSCUT
 
 #include"BaseCuts.h"
 #include"TCut.h"

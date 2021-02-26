@@ -1,6 +1,6 @@
-add_executable(PrepareSignalTrainingSample PrepareSignalTrainingSample.cpp)
+add_executable(PrepareSample PrepareSample.cpp)
 
-target_link_libraries(PrepareSignalTrainingSample PUBLIC B2DhD2KKPiPiSelection)
-target_link_libraries(PrepareSignalTrainingSample PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
+target_link_libraries(PrepareSample PUBLIC B2DhD2KKPiPiSelection)
+target_link_libraries(PrepareSample PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
 
-install(TARGETS PrepareSignalTrainingSample DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../bin)
+install(TARGETS PrepareSample DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../bin)

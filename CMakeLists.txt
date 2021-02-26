@@ -13,7 +13,7 @@ add_compile_options(-Wall)
 add_compile_options(-Wunused)
 add_compile_options(-Wextra)
 add_compile_options(-Werror)
-#add_compile_options(-O3)
+add_compile_options(-O3)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/apps)
 include_directories(${CMAKE_SOURCE_DIR}/include)
