@@ -6,7 +6,7 @@
 #include"TEntryList.h"
 #include"TDirectory.h"
 
-ApplyCuts::Applycuts(TCut Cuts): m_Cuts(Cuts) {
+ApplyCuts::ApplyCuts(TCut Cuts): m_Cuts(Cuts) {
 }
 
 TTree* ApplyCuts::operator()(TTree *InputTree) const {

@@ -18,38 +18,46 @@
 #include"ApplyCuts.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 5) {
+  if(argc != 6) {
     std::cout << "Please input 4 arguments\n";
     return 0;
   }
   std::cout << "Preparing signal training sample from an MC sample from DaVinci\n";
   std::cout << "Initializing TChain...";
   TChain *Chain;
-  if(std::strcmp(argv[3], "pi")) {
+  if(std::string(argv[3]) == "pi") {
     Chain = new TChain("B2DPi_D2KKPiPi/DecayTree");
-  } else if(std::strcmp(argv[3], "K")) {
+  } else if(std::string(argv[3]) == "K") {
     Chain = new TChain("B2DK_D2KKPiPi/DecayTree");
   } else {
     std::cout << "Decay mode " << argv[3] << " unknown\n";
     return 0;
   }
+  std::cout << "TChain initialized\n";
+  std::cout << "Loading input files...\n";
   if(std::atoi(argv[1]) == 0) {
     std::cout << "Need more than 0 input files\n";
     return 0;
   }
   if(std::atoi(argv[1]) == 1) {
-    Chain.Add(argv[2]);
+    Chain->Add(argv[2]);
   } else {
     std::string FilenamePrefix(argv[2]);
     for(int i = 0; i < std::atoi(argv[1]); i++) {
-      Chain.Add(FilenamePrefix + std::to_string(i) + ".root");
+      Chain->Add((FilenamePrefix + std::to_string(i) + ".root").c_str());
     }
   }
-  TruthMatchingCuts Cuts(std::atoi(argv[4]), std::atoi(argv[4]));
+  std::cout << "ROOT files added to TChain\n";
+  std::cout << "Applying selection...\n";
+  TruthMatchingCuts Cuts(std::string(argv[3]), std::atoi(argv[4]));
   ApplyCuts applyCuts(Cuts.GetCuts());
   TFile OutputFile(argv[5], "RECREATE");
   TTree *OutputTree = applyCuts(Chain);
-  OutputFile.Write();
+  std::cout << "TTree with selection ready...\n";
+  std::cout << "Saving file...\n";
+  OutputTree->Write();
   OutputFile.Close();
+  std::cout << "TTree with selection saved to file\n";
+  std::cout << "Signal training sample ready!\n";
   return 0;
 }

@@ -22,7 +22,11 @@ class BaseCuts {
      * @param TriggerCuts Set to true to apply trigger requirements
      * @param BMassCut Set to true to apply cuts on \f$B\f$ mass
      */
-  BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
+    BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
+    /**
+     * Trivial destructor
+     */
+    virtual ~BaseCuts();
     /**
      * Base cuts on bachelor particle
      */
@@ -59,7 +63,7 @@ class BaseCuts {
     /**
      * Year dataset was taken
      */
-    bool m_Year;
+    int m_Year;
     /**
      * Flag for bachelor particle cuts
      */
@@ -71,7 +75,7 @@ class BaseCuts {
     /**
      * Flag for DecayTreeFit cuts
      */
-    bool m_DecayTreeFitCuts;
+    bool m_DecayTreeFitCut;
     /**
      * Flag for \f$D\f$ mass cut
      */
@@ -89,3 +93,5 @@ class BaseCuts {
      */
     bool m_BMassCut;
 };
+
+#endif

@@ -4,7 +4,10 @@
 #include"TCut.h"
 #include"TruthMatchingCuts.h"
 
-TruthMatchingCuts::TruthMatchingCuts(std::string DecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, BMassCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode) {
+TruthMatchingCuts::TruthMatchingCuts(std::string DecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode) {
+}
+
+TruthMatchingCuts::~TruthMatchingCuts() {
 }
 
 TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
@@ -26,12 +29,16 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
   TCut BachTruth;
   if(m_DecayMode == "pi") {
     BachTruth = BachTruth && TCut("(abs(Bach_TRUEID)          == 0 || abs(Bach_TRUEID)          == 211) && "
-                                  "(abs(Bach_MC_MOTHER_ID)    == 0 || abs(Bach_MC_MOTHER_ID)    == 521)";
-  } else if(m_DecayMode "K") {
+                                  "(abs(Bach_MC_MOTHER_ID)    == 0 || abs(Bach_MC_MOTHER_ID)    == 521)");
+  } else if(m_DecayMode == "K") {
     BachTruth = BachTruth && TCut("(abs(Bach_TRUEID)          == 0 || abs(Bach_TRUEID)          == 321) && "
-                                  "(abs(Bach_MC_MOTHER_ID)    == 0 || abs(Bach_MC_MOTHER_ID)    == 521)";
+                                  "(abs(Bach_MC_MOTHER_ID)    == 0 || abs(Bach_MC_MOTHER_ID)    == 521)");
   } else {
     BachTruth = BachTruth && TCut("0");
   }
   return CategoryTruth && D0Truth && h1Truth && h2Truth && h3Truth && h4Truth && BachTruth;
+}
+
+TCut TruthMatchingCuts::GetCuts() const {
+  return BaseCuts::GetCuts() && GetTruthMatchingCuts();
 }

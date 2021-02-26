@@ -3,7 +3,10 @@
 #include"BaseCuts.h"
 #include"TCut.h"
 
-BaseCuts::BaseCuts(bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCuts(DecayTreeFitCuts), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCuts(BMassCuts) {
+BaseCuts::BaseCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCut, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCut(DecayTreeFitCut), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCut(BMassCut) {
+}
+
+BaseCuts::~BaseCuts() {
 }
 
 TCut BaseCuts::BachelorCuts() const {
@@ -41,7 +44,7 @@ TCut BaseCuts::TriggerCuts() const {
 }
 
 TCut BaseCuts::BMassCut() const {
-  return TCut("Bu_constD0PV_M > 5080 && Bu_constD0PV_M < 7000");
+  return TCut("Bu_constD0PV_M > 5080 && Bu_constD0PV_M < 5800");
 }
 
 TCut BaseCuts::GetCuts() const {
@@ -61,7 +64,7 @@ TCut BaseCuts::GetCuts() const {
   if(m_LoosePIDCuts) {
     Cuts = Cuts && LoosePIDCuts();
   }
-  if(m_BMassCuts) {
+  if(m_BMassCut) {
     Cuts = Cuts && BMassCut();
   }
   return Cuts;

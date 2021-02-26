@@ -4,13 +4,16 @@
 #include"HighBMassCut.h"
 #include"BaseCuts.h"
 
-HighBMassCuts::HighBMassCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
+HighBMassCut::HighBMassCut(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
 }
 
-TCut HighBMassCuts::BMassCut() const {
+HighBMassCut::~HighBMassCut() {
+}
+
+TCut HighBMassCut::BMassCut() const {
   return TCut("Bu_constD0PV_M > 5800 && Bu_constD0PV_M < 7000");
 }
 
-TCut HighBMassCuts::GetCuts() const {
-  return BMassCut() && BaseCuts::ApplyCuts();
+TCut HighBMassCut::GetCuts() const {
+  return BMassCut() && BaseCuts::GetCuts();
 }

@@ -28,3 +28,5 @@ class ApplyCuts {
      */
     TCut m_Cuts;
 };
+
+#endif

@@ -16,7 +16,11 @@ class TruthMatchingCuts: public BaseCuts {
     /**
      * Constructor that sets the same options as BaseCuts
      */
-  TruthMatchingCuts(std::string DecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, BMassCuts = true);
+    TruthMatchingCuts(std::string DecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCuts = true);
+    /**
+     * Trivial destructor
+     */
+    virtual ~TruthMatchingCuts();
     /**
      * Truth matching cuts
      */
@@ -31,3 +35,5 @@ class TruthMatchingCuts: public BaseCuts {
      */
     std::string m_DecayMode;
 };
+
+#endif
