@@ -1,5 +1,6 @@
 // Martin Duy Tat 25th February 2021
 
+#include"TCut.h"
 #include"HighBMassCut.h"
 #include"BaseCuts.h"
 

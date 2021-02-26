@@ -1,4 +1,4 @@
-// Martin Duy Tat 25th Februrary 2021
+// Martin Duy Tat 25th February 2021
 /**
  * HighBMassCut is a class derived from BaseCuts, but overrides the \f$B\f$ mass cut and picks the higher mass band
  * Mainly used for selection candidates in the background training sample
@@ -8,6 +8,7 @@
 #define HIGHMASSCUT
 
 #include"BaseCuts.h"
+#include"TCut.h"
 
 class HighBMassCut: public BaseCuts {
   public:
@@ -22,5 +23,5 @@ class HighBMassCut: public BaseCuts {
     /**
      * Get all activated cuts as a TCut object
      */
-    viritual TCut GetCuts() const;
+    virtual TCut GetCuts() const;
 };
