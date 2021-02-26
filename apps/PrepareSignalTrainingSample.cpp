@@ -14,7 +14,7 @@
 #include<stdlib.h>
 #include"TChain.h"
 #include"TFile.h"
-#include"BaseCuts.h"
+#include"TruthMatchingCuts.h"
 #include"ApplyCuts.h"
 
 int main(int argc, char *argv[]) {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
       Chain.Add(FilenamePrefix + std::to_string(i) + ".root");
     }
   }
-  BaseCuts Cuts(std::atoi(argv[4]), true, true, true, true, true, true, true);
+  TruthMatchingCuts Cuts(std::atoi(argv[4]), std::atoi(argv[4]));
   ApplyCuts applyCuts(Cuts.GetCuts());
   TFile OutputFile(argv[5], "RECREATE");
   TTree *OutputTree = applyCuts(Chain);

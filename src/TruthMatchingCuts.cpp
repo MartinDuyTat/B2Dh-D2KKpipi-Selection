@@ -4,7 +4,7 @@
 #include"TCut.h"
 #include"TruthMatchingCuts.h"
 
-TruthMatchingCuts::TruthMatchingCuts(std::string DecayMode, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, BMassCuts): BaseCuts(BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode) {
+TruthMatchingCuts::TruthMatchingCuts(std::string DecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, BMassCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode) {
 }
 
 TCut TruthMatchingCuts::GetTruthMatchingCuts() const {

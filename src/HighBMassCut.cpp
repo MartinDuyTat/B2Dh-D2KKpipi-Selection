@@ -4,7 +4,7 @@
 #include"HighBMassCut.h"
 #include"BaseCuts.h"
 
-HighBMassCuts::HighBMassCuts(bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
+HighBMassCuts::HighBMassCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
 }
 
 TCut HighBMassCuts::BMassCut() const {

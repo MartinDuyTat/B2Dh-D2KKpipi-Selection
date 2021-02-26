@@ -15,7 +15,7 @@ class HighBMassCut: public BaseCuts {
     /**
      * Constructor that sets all same options for cuts as BaseCuts, with the exception of BMassCuts, which is set as false as this is overridden in this class
      */
-    HighBMassCuts(bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true);
+    HighBMassCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true);
     /** 
      * Cut on \f$B\f$ mass after running DecayTreeFitter, selecting background from the high mass band
      */
