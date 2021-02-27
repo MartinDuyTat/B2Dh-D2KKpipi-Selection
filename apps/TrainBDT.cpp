@@ -18,15 +18,18 @@
 #include"Utilities.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 4) {
-    std::cout << "Need 3 input arguments\n";
+  if(argc != 5) {
+    std::cout << "Need 4 input arguments\n";
     return 0;
   }
   std::cout << "BDT training\n";
+  std::cout << "Loading signal and background samples...\n";
   TChain SignalTree("DecayTree");
   SignalTree.Add((std::string(argv[1]) + "/*.root").c_str());
   TChain BackgroundTree("DecayTree");
   BackgroundTree.Add((std::string(argv[2]) + "/*.root").c_str());
+  std::cout << "Training data loaded\n";
+  std::cout << "Loading TMVA and booking BDTG...\n";
   TFile OutputFile((std::string(argv[4]) + ".root").c_str(), "RECREATE");
   std::string FactoryOptions("!V:!Silent:Color:DrawProgressBar:Transformations=I:AnalysisType=Classification");
   TMVA::Factory Factory(TString(argv[4]), &OutputFile, TString(FactoryOptions));
@@ -39,9 +42,11 @@ int main(int argc, char *argv[]) {
   DataLoader.PrepareTrainingAndTestTree(NoCuts, NoCuts, DataLoaderSettings);
   std::string BDTSettings("!H:!V:NTrees=500:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2");
   Factory.BookMethod(&DataLoader, TMVA::Types::kBDT, "BDTG", TString(BDTSettings));
+  std::cout << "Ready to train BDTG\n";
   Factory.TrainAllMethods();
   Factory.TestAllMethods();
   Factory.EvaluateAllMethods();
   OutputFile.Close();
+  std::cout << "Congratulations, BDT is fit and ready!\n";
   return 0;
 }
