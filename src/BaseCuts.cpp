@@ -64,6 +64,9 @@ TCut BaseCuts::GetCuts() const {
   if(m_LoosePIDCuts) {
     Cuts = Cuts && LoosePIDCuts();
   }
+  if(m_TriggerCuts) {
+    Cuts = Cuts && TriggerCuts();
+  }
   if(m_BMassCut) {
     Cuts = Cuts && BMassCut();
   }
