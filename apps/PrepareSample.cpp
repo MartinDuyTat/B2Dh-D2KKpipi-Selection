@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Please input 6 arguments\n";
     return 0;
   }
-  std::cout << "Preparing signal training sample from an MC sample from DaVinci\n";
+  std::cout << "Preparing sample with the " << argv[1] << " cuts\n";
   TChain Chain;
   Utilities::LoadChain(&Chain, std::atoi(argv[2]), std::string(argv[3]), std::string(argv[4]));
   std::cout << "Applying selection...\n";
