@@ -28,13 +28,13 @@ int main(int argc, char *argv[]) {
   TTree *InputData = nullptr;
   InputFile.GetObject("DecayTree", InputFile);
   std::cout << "Datasample ready for classification\n";
-  std::cout << "Loading branch variables...\n";
-  BranchVariables TreeVariables(InputData, std::string(argv[2]));
-  std::cout << "Branch variables ready\n";
   std::cout << "Loading TMVA and booking BDTG classifier...\n";
   TMVA::Reader *Classifier = new TMVA::Reader("!Color:!Silent");
-  std::map<std::string, Float_t> ClassifierVariables;
-  Utilities::AddClassifierVariables(Classifier, ClassifierVariables, std::string(argv[2]));
+  std::cout << "Loading branch and classifier variables...\n";
+  BranchVariables Variables(std::string(argv[2]));
+  Variables.SetTreeBranchAddresses(InputData);
+  Variables.SetClassifierBranchAddresses(Classifier);
+  std::cout << "Branch and classifier variables connected\n";
   Classifier->BookMVA("BDTG method", TString(argv[1]));
   std::cout << "Classifier ready to classify\n";
   std::cout << "Loading BDT output file...\n";
@@ -48,9 +48,7 @@ int main(int argc, char *argv[]) {
       std::cout << "Processing event " << i << std::endl;
     }
     InputData->GetEntry(i);
-    for(auto ClassifierVariables_iter = ClassifierVariables.begin(); ClassifierVariables_iter != ClassifierVariables.end(); ClassifierVariables++) {
-      (*ClassifierVariables_iter)->second = TreeVariables((*ClassifierVariables_iter)->first);
-    }
+    Variables.UpdateVariables();
     BDToutput = Classifier->EvaluateMVA("BDTG method");
     BDTTree.Fill();
   }
@@ -58,6 +56,7 @@ int main(int argc, char *argv[]) {
   BDTTree.Write();
   OutputFile.Close();
   InputFile.Close();
+  delete Classifier;
   std::cout << "Congratulations, all background has been killed!\n";
   return 0;
 }

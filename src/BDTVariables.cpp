@@ -4,8 +4,12 @@
 #include<string>
 #include<vector>
 #include<map>
+#include<algorithm>
 #include<sstream>
 #include<fstream>
+#include"TTree.h"
+#include"TMath.h"
+#include"TMVA/Reader.h"
 
 std::string BDTVariables::DetermineTransformation(std::string Expression) {
   if(Expression.substr(0, 7) == "log(1 -") {
@@ -65,12 +69,48 @@ BDTVariables::BDTVariables(std::string Filename) {
 	std::string variable;
 	ss >> variable;
 	m_Variables.push_back(std::vector<std::string>{transformation, line, variable});
+	m_TreeVariables.insert({variable, 0.0});
+	m_ClassifierVariables.insert({line, 0.0});
       } else if(transformation == "log(min(x, y))" || transformation == "log(max(x, y))") {
 	std::string variable1, variable2;
 	ss >> variable1;
 	ss >> variable2;
 	m_Variables.push_back(std::vector<std::string>{transformation, line, variable1, variable2});
+	m_TreeVariables.insert({variable1, 0.0});
+	m_TreeVariables.insert({variable2, 0.0});
+	m_ClassifierVariables.insert({line, 0.0});
       }
+    }
+  }
+}
+
+void BDTVariables::SetTreeBranchAddresses(TTree *Tree) const {
+  for(auto Variables_iter = m_Variables.begin(); Variables_iter != m_Variables.end(); Variables_iter++) {
+    Tree->SetBranchAddress((*Variables_iter)[2].c_str(), &m_TreeVariables[(*Variables_iter)[2]]);
+    if((*Variables_iter)[0] == "log(min(x, y))" || (*Variables_iter)[0] == "log(max(x, y))") {
+      Tree->SetBranchAddress((*Variables_iter)[3].c_str(), &m_TreeVariables[(*Variables_iter)[3]]);
+    }
+  }
+}
+
+void BDTVariables::SetClassifierBranchAddresses(TMVA::Reader *Classifier) {
+  for(auto Variables_iter = m_Variables.begin(); Variables_iter != m_Variables.end(); Variables_iter++) {
+    Classifier->AddVariable((*Variables_iter)[1], &m_ClassifierVariables[(*Variables_iter)[1]->second]);
+  }
+}
+
+void BDTVariables::UpdateVariables() {
+  for(auto Variables_iter = m_Variables.begin(); Variables_iter != m_Variables.end(); Variables_iter++) {
+    if((*Variables_iter)[0] == "None") {
+      m_ClassifierVariables[(*Variables_iter)[1]] = m_TreeVariables[*(Variables_iter)[2]];
+    } else if((*Variables_iter)[0] == "log(x)") {
+      m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(m_TreeVariables[*(Variables_iter)[2]]);
+    } else if((*Variables_iter)[0] == "log(1 - x)") {
+      m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(1 - m_TreeVariables[*(Variables_iter)[2]]);
+    } else if((*Variables_iter)[0] == "log(min(x, y))") {
+      m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(std::min(m_TreeVariables[*(Variables_iter)[2]], m_TreeVariables[*(Variables_iter)[3]]));
+    } else if((*Variables_iter)[0] == "log(max(x, y))") {
+      m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(std::max(m_TreeVariables[*(Variables_iter)[2]], m_TreeVariables[*(Variables_iter)[3]]));
     }
   }
 }
