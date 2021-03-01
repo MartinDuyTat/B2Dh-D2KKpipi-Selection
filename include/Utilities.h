@@ -29,11 +29,4 @@ namespace Utilities {
    * @param Filename Filename of text file with training variables
    */
   void LoadTrainingVariables(TMVA::DataLoader *DataLoader, std::string Filename);
-  /**
-   * DetermineTransformation takes in a string with a mathematical expression and determines what the variable transformation is
-   * Only "None", "log(x)", "log(1 - x)", "log(max(x, y))" and "log(min(x, y))" is currently supported
-   * @param Expression Mathematical expression we want to determine the transformation of
-   * @return A space separated list of strings, where the first string identifies the transformation (as described above), the second string is the variable name and the third string is the second variable in the "log(max(x, y))" and "log(min(x, y))" cases
-   */
-  std::string DetermineTransformation(std::string Expression);
 }

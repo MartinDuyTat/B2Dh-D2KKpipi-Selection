@@ -29,9 +29,8 @@ int main(int argc, char *argv[]) {
   InputFile.GetObject("DecayTree", InputFile);
   std::cout << "Datasample ready for classification\n";
   std::cout << "Loading branch variables...\n";
-  BranchVariables TreeVariables(std::string(argv[2]));
+  BranchVariables TreeVariables(InputData, std::string(argv[2]));
   std::cout << "Branch variables ready\n";
-  Utilities::SetBranchAddresses(InputData, variables, std::string(argv[2]));
   std::cout << "Loading TMVA and booking BDTG classifier...\n";
   TMVA::Reader *Classifier = new TMVA::Reader("!Color:!Silent");
   std::map<std::string, Float_t> ClassifierVariables;
