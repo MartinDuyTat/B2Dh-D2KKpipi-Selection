@@ -15,7 +15,7 @@
 #include"TFile.h"
 #include"TMVA/Reader.h"
 #include"Utilities.h"
-#include"BranchVariables.h"
+#include"BDTVariables.h"
 
 int main(int argc, char *argv[]) {
   if(argc != 5) {
@@ -26,12 +26,12 @@ int main(int argc, char *argv[]) {
   std::cout << "Loading datasample...\n";
   TFile InputFile(argv[3], "READ");
   TTree *InputData = nullptr;
-  InputFile.GetObject("DecayTree", InputFile);
+  InputFile.GetObject("DecayTree", InputData);
   std::cout << "Datasample ready for classification\n";
   std::cout << "Loading TMVA and booking BDTG classifier...\n";
   TMVA::Reader *Classifier = new TMVA::Reader("!Color:!Silent");
   std::cout << "Loading branch and classifier variables...\n";
-  BranchVariables Variables(std::string(argv[2]));
+  BDTVariables Variables{std::string(argv[2])};
   Variables.SetTreeBranchAddresses(InputData);
   Variables.SetClassifierBranchAddresses(Classifier);
   std::cout << "Branch and classifier variables connected\n";
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   TFile OutputFile(argv[4], "RECREATE");
   TTree BDTTree("BDTG", "BDTG outputs");
   Double_t BDToutput;
-  BDTTree->Branch("BDToutput", &BDToutput);
+  BDTTree.Branch("BDToutput", &BDToutput);
   std::cout << "BDT output tree ready\n";
   for(Long64_t i = 0; i < InputData->GetEntries(); i++) {
     if(i%1000 == 0) {

@@ -31,7 +31,7 @@ class BDTVariables {
      * Function that sets all the branch addresses of the TTree to the corresponding variables in m_TreeVariables
      * @param Tree TTree with the data before applying the BDT
      */
-    void SetTreeBranchAddresses(TTree *Tree) const;
+    void SetTreeBranchAddresses(TTree *Tree);
     /**
      * Function that sets all the branch addresses of the TMVA::Reader to the corresponding variables in m_ClassifierVariables
      * @param Classifier TMVA::Reader object with the BDT
