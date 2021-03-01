@@ -57,6 +57,6 @@ int main(int argc, char *argv[]) {
   OutputFile.Close();
   InputFile.Close();
   delete Classifier;
-  std::cout << "Congratulations, all background has been killed!\n";
+  std::cout << "Congratulations, all background has been swept under the carpet!\n";
   return 0;
 }

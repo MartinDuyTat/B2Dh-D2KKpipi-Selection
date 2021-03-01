@@ -17,7 +17,7 @@ std::string BDTVariables::DetermineTransformation(std::string Expression) {
     // Remove first 8 characters and last character to get variable name
     std::string variable = Expression.erase(0, 8);
     variable.erase(variable.size() - 1);
-    return "log(1 - x) " + variable;
+    return "log(1-x) " + variable;
   } else if(Expression.substr(0, 8) == "log(min(") {
     // If transformation is "log(min(x, y))
     // First split up string by whitespace
@@ -30,7 +30,7 @@ std::string BDTVariables::DetermineTransformation(std::string Expression) {
     variable1.erase(variable1.size() - 1);
     // Remove last 2 characters of second part
     std::string variable2 = SecondPart.erase(SecondPart.size() - 2);
-    return "log(min(x, y)) " + variable1 + " " + variable2;
+    return "log(min(x,y)) " + variable1 + " " + variable2;
   } else if(Expression.substr(0, 8) == "log(max(") {
     // If transformation is "log(max(x, y))
     // First split up string by whitespace
@@ -43,7 +43,7 @@ std::string BDTVariables::DetermineTransformation(std::string Expression) {
     variable1.erase(variable1.size() - 1);
     // Remove last 2 characters of second part
     std::string variable2 = SecondPart.erase(SecondPart.size() - 2);
-    return "log(max(x, y)) " + variable1 + " " + variable2;
+    return "log(max(x,y)) " + variable1 + " " + variable2;
   } else if(Expression.substr(0, 4) == "log(") {
     // If transformation is "log(x)
     // Remove first 4 characters and last character to get varables name
@@ -65,13 +65,13 @@ BDTVariables::BDTVariables(std::string Filename) {
       std::string transformation;
       std::istringstream ss(ParsedLine);
       ss >> transformation;
-      if(transformation == "None" || transformation == "log(1 - x)" || transformation == "log(x)") {
+      if(transformation == "None" || transformation == "log(1-x)" || transformation == "log(x)") {
 	std::string variable;
 	ss >> variable;
 	m_Variables.push_back(std::vector<std::string>{transformation, line, variable});
 	m_TreeVariables.insert({variable, 0.0});
 	m_ClassifierVariables.insert({line, 0.0});
-      } else if(transformation == "log(min(x, y))" || transformation == "log(max(x, y))") {
+      } else if(transformation == "log(min(x,y))" || transformation == "log(max(x,y))") {
 	std::string variable1, variable2;
 	ss >> variable1;
 	ss >> variable2;
@@ -105,11 +105,11 @@ void BDTVariables::UpdateVariables() {
       m_ClassifierVariables[(*Variables_iter)[1]] = m_TreeVariables[(*Variables_iter)[2]];
     } else if((*Variables_iter)[0] == "log(x)") {
       m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(m_TreeVariables[(*Variables_iter)[2]]);
-    } else if((*Variables_iter)[0] == "log(1 - x)") {
+    } else if((*Variables_iter)[0] == "log(1-x)") {
       m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(1 - m_TreeVariables[(*Variables_iter)[2]]);
-    } else if((*Variables_iter)[0] == "log(min(x, y))") {
+    } else if((*Variables_iter)[0] == "log(min(x,y))") {
       m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(std::min(m_TreeVariables[(*Variables_iter)[2]], m_TreeVariables[(*Variables_iter)[3]]));
-    } else if((*Variables_iter)[0] == "log(max(x, y))") {
+    } else if((*Variables_iter)[0] == "log(max(x,y))") {
       m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(std::max(m_TreeVariables[(*Variables_iter)[2]], m_TreeVariables[(*Variables_iter)[3]]));
     }
   }
