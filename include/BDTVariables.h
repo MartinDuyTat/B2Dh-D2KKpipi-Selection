@@ -48,9 +48,13 @@ class BDTVariables {
      */
     std::vector<std::vector<std::string>> m_Variables;
     /**
-     * Map that stores the names and values of TTree variables
+     * Map that stores the names and values of TTree variables of Double_t type
      */
     std::map<std::string, Double_t> m_TreeVariables;
+    /**
+     * Map that stores the names and values of TTree variables of Float_t type (only the transformation "log(x)" uses this type
+     */
+    std::map<std::string, Float_t> m_TreeVariablesF;
     /**
      * Map that stores the names and values of the TMVA::Reader variables
      */

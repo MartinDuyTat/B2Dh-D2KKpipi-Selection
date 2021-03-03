@@ -69,7 +69,12 @@ BDTVariables::BDTVariables(std::string Filename) {
 	std::string variable;
 	ss >> variable;
 	m_Variables.push_back(std::vector<std::string>{transformation, line, variable});
-	m_TreeVariables.insert({variable, 0.0});
+	// If variable is from DecayTreeFitter, it's of Float_t type, need to save this separately
+	if(line.find("constD0PV") == std::string::npos) {
+	  m_TreeVariables.insert({variable, 0.0});
+	} else {
+	  m_TreeVariablesF.insert({variable, 0.0});
+	}
 	m_ClassifierVariables.insert({line, 0.0});
       } else if(transformation == "log(min(x,y))" || transformation == "log(max(x,y))") {
 	std::string variable1, variable2;
@@ -86,7 +91,12 @@ BDTVariables::BDTVariables(std::string Filename) {
 
 void BDTVariables::SetTreeBranchAddresses(TTree *Tree) {
   for(auto Variables_iter = m_Variables.begin(); Variables_iter != m_Variables.end(); Variables_iter++) {
-    Tree->SetBranchAddress((*Variables_iter)[2].c_str(), &m_TreeVariables[(*Variables_iter)[2]]);
+    // If variable is from DecayTreeFitter, it's of Float_t type, need to save this separately
+    if((*Variables_iter)[2].find("constD0PV") == std::string::npos) {
+      Tree->SetBranchAddress((*Variables_iter)[2].c_str(), &m_TreeVariables[(*Variables_iter)[2]]);
+    } else {
+      Tree->SetBranchAddress((*Variables_iter)[2].c_str(), &m_TreeVariablesF[(*Variables_iter)[2]]);
+    }
     if((*Variables_iter)[0] == "log(min(x, y))" || (*Variables_iter)[0] == "log(max(x, y))") {
       Tree->SetBranchAddress((*Variables_iter)[3].c_str(), &m_TreeVariables[(*Variables_iter)[3]]);
     }
@@ -104,7 +114,11 @@ void BDTVariables::UpdateVariables() {
     if((*Variables_iter)[0] == "None") {
       m_ClassifierVariables[(*Variables_iter)[1]] = m_TreeVariables[(*Variables_iter)[2]];
     } else if((*Variables_iter)[0] == "log(x)") {
-      m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(m_TreeVariables[(*Variables_iter)[2]]);
+      if((*Variables_iter)[2].find("constD0PV") == std::string::npos) {
+	m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(m_TreeVariables[(*Variables_iter)[2]]);
+      } else {
+	m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(m_TreeVariablesF[(*Variables_iter)[2]]);
+      }
     } else if((*Variables_iter)[0] == "log(1-x)") {
       m_ClassifierVariables[(*Variables_iter)[1]] = TMath::Log(1 - m_TreeVariables[(*Variables_iter)[2]]);
     } else if((*Variables_iter)[0] == "log(min(x,y))") {
