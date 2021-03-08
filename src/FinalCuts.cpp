@@ -4,10 +4,14 @@
 #include"FinalCuts.h"
 #include"TCut.h"
 
-FinalCuts::FinalCuts(std::string Mode, bool BachelorPIDCut, bool KaonDaughterPIDCut, bool FlightSignificanceCut, bool DTFChi2Cut): m_Mode(Mode), m_BachelorPIDCut(BachelorPIDCut), m_KaonDaughterPIDCut(KaonDaughterPIDCut), m_FlightSignificanceCut(FlightSignificanceCut), m_DTFChi2Cut(DTFChi2Cut) {
+FinalCuts::FinalCuts(std::string Mode, double BDTcut, bool BachelorPIDCut, bool KaonDaughterPIDCut, bool FlightSignificanceCut, bool DTFChi2Cut): m_Mode(Mode), m_BDTcut(BDTcut), m_BachelorPIDCut(BachelorPIDCut), m_KaonDaughterPIDCut(KaonDaughterPIDCut), m_FlightSignificanceCut(FlightSignificanceCut), m_DTFChi2Cut(DTFChi2Cut) {
 }
 
 FinalCuts::~FinalCuts() {
+}
+
+TCut FinalCuts::BDTCut() const {
+  return TCut(std::string("BDToutput > " + std::to_string(m_BDTcut)).c_str());
 }
 
 TCut FinalCuts::BachelorPIDCut() const {
@@ -33,7 +37,7 @@ TCut FinalCuts::DTFChi2Cut() const {
 }
 
 TCut FinalCuts::GetCuts() const {
-  TCut Cuts;
+  TCut Cuts = BDTCut();
   if(m_BachelorPIDCut) {
     Cuts = Cuts && BachelorPIDCut();
   }
