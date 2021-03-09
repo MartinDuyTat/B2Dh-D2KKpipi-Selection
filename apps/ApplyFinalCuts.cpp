@@ -42,6 +42,6 @@ int main(int argc, char *argv[]) {
   OutputTree->Write();
   OutputFile.Close();
   std::cout << "TTree with selection saved to file\n";
-  std::cout << "Signal training sample ready!\n";
+  std::cout << "Final selection ready!\n";
   return 0;
 }
