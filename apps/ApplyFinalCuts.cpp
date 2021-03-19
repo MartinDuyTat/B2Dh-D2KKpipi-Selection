@@ -5,7 +5,8 @@
  * @param 1 ROOT filename with data sample
  * @param 2 ROOT filename with BDToutput
  * @param 3 Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
- * @param 4 Filename of output ROOT file
+ * @param 4 Input "yes" omit cut on flight significance and DecayTreeFitter \f$\chi^2\f$ for charmless backgrounds study
+ * @param 5 Filename of output ROOT file
  */
 
 #include<iostream>
@@ -33,8 +34,11 @@ int main(int argc, char *argv[]) {
   InputTree->AddFriend(BDTTree);
   std::cout << "Applying selection...\n";
   FinalCuts Cuts{std::string(argv[3])};
+  if(std::string(argv[4]) == "yes") {
+    Cuts = FinalCuts{std::string(argv[3]), 0.75, true, true, false, false};
+  }
   ApplyCuts applyCuts(Cuts.GetCuts());
-  TFile OutputFile(argv[4], "RECREATE");
+  TFile OutputFile(argv[5], "RECREATE");
   TTree *OutputTree = applyCuts(InputTree);
   std::cout << "TTree with selection ready...\n";
   std::cout << "Saving file...\n";
