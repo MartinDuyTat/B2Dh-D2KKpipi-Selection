@@ -18,7 +18,7 @@ class BaseCuts {
      * @param KaonDaughterCuts Set to true to apply cuts on Kaon daugthers
      * @param DecayTreeFitCuts Set to true to apply cuts on DecayTreeFitter convergence
      * @param DMassCut Set to true to apply cuts on \f$D\f$ mass
-     * @param LoosePIDCuts Set to true to apply loose PID cuts
+     * @param LoosePIDCuts Set to true to apply loose PID cuts (already present in Run 2 stripping, but not Run 1)
      * @param TriggerCuts Set to true to apply trigger requirements
      * @param BMassCut Set to true to apply cuts on \f$B\f$ mass
      */

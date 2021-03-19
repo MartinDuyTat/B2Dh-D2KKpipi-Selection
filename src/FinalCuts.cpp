@@ -25,11 +25,11 @@ TCut FinalCuts::BachelorPIDCut() const {
 }
 
 TCut FinalCuts::KaonDaughterPIDCut() const {
-  return TCut("h1_PIDK > -5 && h2_PIDK > -5");
+  return TCut("h1_PIDK > 0 && h2_PIDK > 0");
 }
 
 TCut FinalCuts::FlightSignificanceCut() const {
-  return TCut("(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/( sqrt( D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR)) > 0.5");
+  return TCut("(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/(sqrt(D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR)) > 0.5");
 }
 
 TCut FinalCuts::DTFChi2Cut() const {

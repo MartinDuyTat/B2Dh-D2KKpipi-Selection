@@ -26,7 +26,7 @@ TCut BaseCuts::DMassCut() const {
 }
 
 TCut BaseCuts::LoosePIDCuts() const {
-  return TCut("h1_PIDK > -5 && h2_PIDK > -5 && h3_PIDK < 20 && h4_PIDK < 20");
+  return TCut("h3_PIDK < 20 && h4_PIDK < 20");
 }
 
 TCut BaseCuts::TriggerCuts() const {

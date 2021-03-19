@@ -9,6 +9,7 @@
 #include"BaseCuts.h"
 #include"TruthMatchingCuts.h"
 #include"HighBMassCut.h"
+#include"CharmlessCuts.h"
 
 namespace Utilities {
   void LoadChain(TChain *Chain, int NumberFiles, std::string Filename, std::string DecayMode) {
@@ -45,6 +46,8 @@ namespace Utilities {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{Year}};
     } else if(CutType == "PrepareBDT") {
       return std::unique_ptr<BaseCuts>{new BaseCuts{Year}};
+    } else if(CutType == "PrepareCharmless") {
+      return std::unique_ptr<BaseCuts>{new CharmlessCuts{Year}};
     } else {
       std::cout << "Cut type not recognized\n";
       return std::unique_ptr<BaseCuts>{nullptr};
