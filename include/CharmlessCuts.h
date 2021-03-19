@@ -15,7 +15,7 @@ class CharmlessCuts: public BaseCuts {
     /**
      * Constructor that sets all same options for cuts as BaseCuts, with the exception of DMassCut, which is set as false as this is overridden in this class, and DecayTreeFit has been turned off
      */
-    CharmlessCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool LoosePIDCuts = true, bool TriggerCuts, bool BMassCut = true);
+    CharmlessCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
     /**
      * Tritial destructor
      */
