@@ -42,7 +42,7 @@ class BaseCuts {
     /**
      * Cut on \f$D\f$ mass
      */
-    TCut DMassCut() const;
+    virtual TCut DMassCut() const;
     /**
      * Loose PID cuts
      */
