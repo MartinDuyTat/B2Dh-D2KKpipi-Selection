@@ -89,7 +89,7 @@ class BaseCuts {
      */
     bool m_TriggerCuts;
     /**
-     * Flag for \f$D\f$ mass cut
+     * Flag for \f$B\f$ mass cut
      */
     bool m_BMassCut;
 };

@@ -24,10 +24,19 @@ class CharmlessCuts: public BaseCuts {
      * Cut on \f$D\f$ mass, selecting charmless background from the low mass sideband
      */
     virtual TCut DMassCut() const;
+    /** 
+     * Cut on \f$B\f$ mass, selecting the same range as before but using the reconstructed $B$ mass instead of the one from DecayTreeFitter
+     */
+    virtual TCut BMassCut() const;
     /**
      * Get all activated cuts as a TCut object
      */
     virtual TCut GetCuts() const;
+  private:
+    /**
+     * Flag for \f$B\f$ mass cut
+     */
+    bool m_BMassCut;
 };
 
 #endif
