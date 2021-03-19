@@ -20,8 +20,8 @@
 #include"Utilities.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 5) {
-    std::cout << "Please input 6 arguments\n";
+  if(argc != 6) {
+    std::cout << "Please input 5 arguments\n";
     return 0;
   }
   std::cout << "Final event selection\n";
