@@ -16,7 +16,7 @@ class ApplyCuts {
      * Constructor that takes in a cut for the selection
      * @param Cuts Cuts that will be applied in selection
      */
-    ApplyCuts(TCut Cuts);
+    ApplyCuts(TCut Cuts, bool CopyDTFBranch = false);
     /**
      * () operator overload so that one can pass a TTree or TChain to this object and get a skimmed TTree back
      * @param TTree or TChain with event
@@ -27,6 +27,10 @@ class ApplyCuts {
      * Cuts that will be applied to selection
      */
     TCut m_Cuts;
+    /**
+     * If this flag is true, copy the branch Bu_constD0PV_M so that its type is Float_t, not an array of Float_t (RooFit doesn't work with arrays, very annoying)
+     */
+    bool m_CopyDTFBranch;
 };
 
 #endif
