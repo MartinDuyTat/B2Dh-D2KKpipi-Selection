@@ -4,7 +4,7 @@
 #include"CharmlessCuts.h"
 #include"BaseCuts.h"
 
-CharmlessCuts::CharmlessCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool BMassCut): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, false, false, LoosePIDCuts, false), m_BMassCut(BMassCut) {
+CharmlessCuts::CharmlessCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, false, false, LoosePIDCuts, TriggerCuts, false), m_BMassCut(BMassCut) {
 }
 
 CharmlessCuts::~CharmlessCuts() {
