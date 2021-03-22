@@ -29,7 +29,7 @@ TCut FinalCuts::KaonDaughterPIDCut() const {
 }
 
 TCut FinalCuts::FlightSignificanceCut() const {
-  return TCut("(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/(sqrt(D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR)) > 0.5");
+  return TCut("(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/(sqrt(D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR)) > 2.0");
 }
 
 TCut FinalCuts::DTFChi2Cut() const {
