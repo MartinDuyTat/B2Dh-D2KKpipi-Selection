@@ -21,7 +21,7 @@ class FinalCuts {
      * @param FlightSignificanceCut Set to true to apply cut on flight significance
      * @param DTFChi2Cut Set to true to apply cuts on DecayTreeFitter \f$\chi^2\f$
      */
-    FinalCuts(std::string Mode, double BDTcut = 0.75, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = true);
+    FinalCuts(std::string Mode, double BDTcut = 0.0, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = true);
     /**
      * Trivial destructor
      */

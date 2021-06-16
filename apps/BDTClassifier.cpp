@@ -4,7 +4,7 @@
  * @param 1 Filename of XML file with the BDT weights
  * @param 2 Filename of text file with list of training variables
  * @param 3 Filename of ROOT file with datasample
- * @param 4 Filename of output file with BDT classifier output, saved in a TTree
+ * @param 4 Filename of ROOT file with BDT outputs, and a loose BDT cut at 0.0
  */
 
 #include<iostream>
@@ -28,6 +28,12 @@ int main(int argc, char *argv[]) {
   TTree *InputData = nullptr;
   InputFile.GetObject("DecayTree", InputData);
   std::cout << "Datasample ready for classification\n";
+  std::cout << "Preparing output ROOT file\n";
+  TFile OutputFile(argv[4], "RECREATE");
+  TTree *OutputData = InputData->CloneTree(0);
+  Double_t BDToutput;
+  OutputData->Branch("BDToutput", &BDToutput);
+  std::cout << "Output TTree ready\n";
   std::cout << "Loading TMVA and booking BDTG classifier...\n";
   TMVA::Reader *Classifier = new TMVA::Reader("!Color:!Silent");
   std::cout << "Loading branch and classifier variables...\n";
@@ -37,12 +43,6 @@ int main(int argc, char *argv[]) {
   std::cout << "Branch and classifier variables connected\n";
   Classifier->BookMVA("BDTG method", TString(argv[1]));
   std::cout << "Classifier ready to classify\n";
-  std::cout << "Loading BDT output file...\n";
-  TFile OutputFile(argv[4], "RECREATE");
-  TTree BDTTree("BDTG", "BDTG outputs");
-  Double_t BDToutput;
-  BDTTree.Branch("BDToutput", &BDToutput);
-  std::cout << "BDT output tree ready\n";
   for(Long64_t i = 0; i < InputData->GetEntries(); i++) {
     if(i%1000 == 0) {
       std::cout << "Processing event " << i << std::endl;
@@ -50,10 +50,12 @@ int main(int argc, char *argv[]) {
     InputData->GetEntry(i);
     Variables.UpdateVariables();
     BDToutput = Classifier->EvaluateMVA("BDTG method");
-    BDTTree.Fill();
+    if(BDToutput > 0.0) {
+      OutputData->Fill();
+    }
   }
   std::cout << "Classified all events\n";
-  BDTTree.Write();
+  OutputData->Write();
   OutputFile.Close();
   InputFile.Close();
   delete Classifier;
