@@ -19,9 +19,9 @@ class FinalCuts {
      * @param BachelorPIDCut Set to true to apply PID cut on bachelor particle
      * @param KaonDaughterPIDCut Set to true to apply PID cut on kaon daughters
      * @param FlightSignificanceCut Set to true to apply cut on flight significance
-     * @param DTFChi2Cut Set to true to apply cuts on DecayTreeFitter \f$\chi^2\f$
+     * @param DTFChi2Cut Set to true to apply cuts on DecayTreeFitter \f$\chi^2\f$ (not necessary because it's a BDT training variable)
      */
-    FinalCuts(std::string Mode, double BDTcut = 0.0, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = true);
+    FinalCuts(std::string Mode, double BDTcut = 0.0, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = false);
     /**
      * Trivial destructor
      */

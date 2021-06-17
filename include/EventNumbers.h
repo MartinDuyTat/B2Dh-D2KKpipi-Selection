@@ -17,10 +17,11 @@ class EventNumbers {
     /**
      * Constructor that takes in a text filename containing the filenames of all ROOT files with final selection
      * @param Filename File containing all filenames fo dataset
+     * @param BDTCut BDT cut
      */
-    EventNumbers(const std::string &Filename);
+    EventNumbers(const std::string &Filename, double BDTCut);
     /**
-     * Function that compares two datasets and checks how many events they have that are the same inside the signal region
+     * Function that compares two datasets and checks how many events they have in common inside the signal region (intersection) and the total number of events inside the signal region (union)
      * @param rhs Another EventNumbers object to compare with
      */
     void CompareEvents(const EventNumbers &rhs) const;
