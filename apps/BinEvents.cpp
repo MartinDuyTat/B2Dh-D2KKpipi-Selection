@@ -3,9 +3,8 @@
  * BinEvents is an application that determines the bin number for each event and saves it to the ROOT file
  * @param 1 Name of ROOT file with B events
  * @param 2 Name of TTree
- * @param 3 Number of bins
- * @param 4 Name of ROOT output file
- * @param 5 Year of dataset
+ * @param 3 Name of ROOT output file
+ * @param 4 Year of dataset
  */
 
 #include<iostream>
@@ -19,8 +18,8 @@
 #include"AmplitudePhaseSpace.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 4) {
-    std::cout << "Need 3 input arguments\n";
+  if(argc != 5) {
+    std::cout << "Need 4 input arguments\n";
     return 0;
   }
   std::cout << "Loading ROOT input file...\n";
@@ -28,14 +27,15 @@ int main(int argc, char *argv[]) {
   TTree *Tree = nullptr;
   Infile.GetObject(argv[2], Tree);
   std::cout << "Input file ready\n";
-  std::cout << "Creating output ROOT file...";
-  TFile Outfile(argv[4], "RECREATE");
+  std::cout << "Creating output ROOT file...\n";
+  TFile Outfile(argv[3], "RECREATE");
   TTree *OutTree = Tree->CloneTree(0);
-  int BinNumber;
-  OutTree->Branch("BinNumber", &BinNumber, "BinNumber/I");
-  int NumberBins = std::atoi(argv[3]);
+  int BinNumber_4Bins, BinNumber_6Bins, BinNumber_8Bins;
+  OutTree->Branch("BinNumber_4Bins", &BinNumber_4Bins, "BinNumber_4Bins/I");
+  OutTree->Branch("BinNumber_6Bins", &BinNumber_6Bins, "BinNumber_6Bins/I");
+  OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
-  std::cout << "Booking variables...";
+  std::cout << "Booking variables...\n";
   std::vector<Float_t> DaughterMomenta(16);
   Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PX", DaughterMomenta.data() + 0);
   Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PY", DaughterMomenta.data() + 1);
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PY", DaughterMomenta.data() + 9);
   Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PZ", DaughterMomenta.data() + 10);
   Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PE", DaughterMomenta.data() + 11);
-  if(std::stoi(argv[5]) == 2011 || std::stoi(argv[5]) == 2012) {
+  if(std::stoi(argv[4]) == 2011 || std::stoi(argv[4]) == 2012) {
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PX", DaughterMomenta.data() + 12);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PY", DaughterMomenta.data() + 13);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PZ", DaughterMomenta.data() + 14);
@@ -62,21 +62,22 @@ int main(int argc, char *argv[]) {
   }
   std::cout << "Variables ready\n";
   std::cout << "Preparing binning scheme...\n";
-  AmplitudePhaseSpace aph(NumberBins);
-  if(NumberBins == 4) {
-    aph.SetBinEdges(std::vector<double>{1.20923});
-  } else if(NumberBins == 6) {
-    aph.SetBinEdges(std::vector<double>{0.645101, 1.72065});
-  } else if(NumberBins == 8) {
-    aph.SetBinEdges(std::vector<double>{0.458065, 1.15464, 2.09644});
-  }
+  AmplitudePhaseSpace aph4(4), aph6(6), aph8(8);
+  aph4.SetBinEdges(std::vector<double>{1.20923});
+  aph6.SetBinEdges(std::vector<double>{0.645101, 1.72065});
+  aph8.SetBinEdges(std::vector<double>{0.458065, 1.15464, 2.09644});
+  aph4.UseVariableBinWidths(true);
+  aph6.UseVariableBinWidths(true);
+  aph8.UseVariableBinWidths(true);
   std::cout << "Ready to bin events\n";
   std::cout << "Binning events...\n";
   for(int i = 0; i < Tree->GetEntries(); i++) {
     Tree->GetEntry(i);
     std::vector<double> P(DaughterMomenta.begin(), DaughterMomenta.end());
     std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
-    BinNumber = aph.WhichBin(Event(P));
+    BinNumber_4Bins = aph4.WhichBin(Event(P));
+    BinNumber_6Bins = aph6.WhichBin(Event(P));
+    BinNumber_8Bins = aph8.WhichBin(Event(P));
     OutTree->Fill();
   }
   OutTree->Write();
