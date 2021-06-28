@@ -35,9 +35,11 @@ int main(int argc, char *argv[]) {
   TMVA::Factory Factory(TString(argv[4]), &OutputFile, TString(FactoryOptions));
   TMVA::DataLoader DataLoader = TMVA::DataLoader(TString(argv[4]));
   Utilities::LoadTrainingVariables(&DataLoader, std::string(argv[3]));
-  DataLoader.AddSignalTree(&SignalTree);
-  DataLoader.AddBackgroundTree(&BackgroundTree);
-  std::string DataLoaderSettings("nTrain_Signal=0:nTrain_Background=0:SplitMode=Random:NormMode=NumEvents:!V");
+  DataLoader.AddTree(&SignalTree, "Signal", 1.0, "(eventNumber%2 == 1)", TMVA::Types::kTraining);
+  DataLoader.AddTree(&SignalTree, "Signal", 1.0, "(eventNumber%2 == 0)", TMVA::Types::kTesting);
+  DataLoader.AddTree(&BackgroundTree, "Background", 1.0, "eventNumber%2 == 1", TMVA::Types::kTraining);
+  DataLoader.AddTree(&BackgroundTree, "Background", 1.0, "eventNumber%2 == 0", TMVA::Types::kTesting);
+  std::string DataLoaderSettings("nTrain_Signal=0:nTrain_Background=0:NormMode=NumEvents:!V");
   TCut NoCuts;
   DataLoader.PrepareTrainingAndTestTree(NoCuts, NoCuts, DataLoaderSettings);
   std::string BDTSettings("!H:!V:NTrees=500:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2");
