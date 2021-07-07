@@ -24,6 +24,7 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
                "(abs(h3_MC_MOTHER_ID)    == 0 || abs(h3_MC_MOTHER_ID)    == 421) && " 
                "(abs(h3_MC_GD_MOTHER_ID) == 0 || abs(h3_MC_GD_MOTHER_ID) == 521)");
   if(m_MisID == "Single") {
+    CategoryTruth = TCut("Bu_BKGCAT == 0 || Bu_BKGCAT == 50 || Bu_BKGCAT == 60 || Bu_BKGCAT == 30");
     h1Truth = TCut("(abs(h1_TRUEID)          == 321) && "
 		   "(abs(h1_MC_MOTHER_ID)    == 0 || abs(h1_MC_MOTHER_ID)    == 421) && " 
 		   "(abs(h1_MC_GD_MOTHER_ID) == 0 || abs(h1_MC_GD_MOTHER_ID) == 521)");
@@ -33,6 +34,7 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
     h3Truth = TCut("(abs(h3_MC_MOTHER_ID)    == 0 || abs(h3_MC_MOTHER_ID)    == 421) && " 
 		   "(abs(h3_MC_GD_MOTHER_ID) == 0 || abs(h3_MC_GD_MOTHER_ID) == 521)");
   } else if(m_MisID == "Triple") {
+    CategoryTruth = TCut("Bu_BKGCAT == 0 || Bu_BKGCAT == 50 || Bu_BKGCAT == 60 || Bu_BKGCAT == 30");
     h1Truth = TCut("(abs(h1_TRUEID)          == 211) && "
 		   "(abs(h1_MC_MOTHER_ID)    == 0 || abs(h1_MC_MOTHER_ID)    == 421) && " 
 		   "(abs(h1_MC_GD_MOTHER_ID) == 0 || abs(h1_MC_GD_MOTHER_ID) == 521)");
