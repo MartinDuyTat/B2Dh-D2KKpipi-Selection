@@ -42,6 +42,10 @@ namespace Utilities {
   std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, std::string DecayMode, int Year) {
     if(CutType == "SignalTraining") {
       return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year}};
+    } else if(CutType == "KpipipiSingleMisID") {
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single"}};
+    } else if(CutType == "KpipipiTripleMisID") {
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple"}};
     } else if(CutType == "BackgroundTraining") {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{Year}};
     } else if(CutType == "PrepareBDT") {

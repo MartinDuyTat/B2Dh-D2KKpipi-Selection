@@ -6,6 +6,8 @@
  * "BackgroundTraining", the standard base cuts but the \f$B\f$ mass is between \f$5800\f$MeV and \f$7000\f$ MeV to prepare a background sample for the BDT
  * "PrepareBDT", the standard base cuts before applying a BDT
  * "PrepareCharmless", similar to "PrepareBDT" but picks out the lower D mass sideband
+ * "KpipipiSingleMisID", the standard base cuts and MC truth matching with single mis-ID of Kpipipi to KKpipi
+ * "KpipipiTripleMisID", the standard base cuts and MC truth matching with triple mis-ID of pipikpi to KKpipi
  * @param 1 Cut type as described above
  * @param 2 Number of input files
  * @param 3 If there's a single input file, input full path name, otherwise input the path name without the number and file extension (e.g. if filenames are myfile0.root, myfile1.root, etc input myfile)
