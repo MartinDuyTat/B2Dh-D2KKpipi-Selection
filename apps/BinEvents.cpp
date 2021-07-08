@@ -36,7 +36,11 @@ int main(int argc, char *argv[]) {
   OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
   std::cout << "Booking variables...\n";
-  std::vector<Float_t> DaughterMomenta(16);
+  std::vector<Double_t> DaughterMomenta(16);
+  std::vector<Double_t> DaughterIDs(4);
+  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_ID", DaughterIDs.data() + 0);
+  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_ID", DaughterIDs.data() + 1);
+  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_ID", DaughterIDs.data() + 2);
   Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PX", DaughterMomenta.data() + 0);
   Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PY", DaughterMomenta.data() + 1);
   Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PZ", DaughterMomenta.data() + 2);
@@ -50,11 +54,13 @@ int main(int argc, char *argv[]) {
   Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PZ", DaughterMomenta.data() + 10);
   Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PE", DaughterMomenta.data() + 11);
   if(std::stoi(argv[4]) == 2011 || std::stoi(argv[4]) == 2012) {
+    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_ID", DaughterIDs.data() + 3);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PX", DaughterMomenta.data() + 12);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PY", DaughterMomenta.data() + 13);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PZ", DaughterMomenta.data() + 14);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PE", DaughterMomenta.data() + 15);
   } else {
+    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_ID", DaughterIDs.data() + 3);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PX", DaughterMomenta.data() + 12);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PY", DaughterMomenta.data() + 13);
     Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PZ", DaughterMomenta.data() + 14);
@@ -73,6 +79,28 @@ int main(int argc, char *argv[]) {
   std::cout << "Binning events...\n";
   for(int i = 0; i < Tree->GetEntries(); i++) {
     Tree->GetEntry(i);
+    if(std::stoi(argv[4]) == 2011 || std::stoi(argv[4]) == 2012) {
+      int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
+      if(KPlusIndex != 0) {
+	std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);
+	std::swap_ranges(DaughterMomenta.begin() + 0, DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 4*KPlusIndex);
+      }
+      int KMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -321) - DaughterIDs.begin();
+      if(KMinusIndex != 0) {
+	std::swap(DaughterIDs[1], DaughterIDs[KMinusIndex]);
+	std::swap_ranges(DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 4*KMinusIndex);
+      }
+      int piPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 211) - DaughterIDs.begin();
+      if(piPlusIndex != 0) {
+	std::swap(DaughterIDs[2], DaughterIDs[piPlusIndex]);
+	std::swap_ranges(DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 4*piPlusIndex);
+      }
+      int piMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -211) - DaughterIDs.begin();
+      if(piMinusIndex != 0) {
+	std::swap(DaughterIDs[3], DaughterIDs[piMinusIndex]);
+	std::swap_ranges(DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 16, DaughterMomenta.begin() + 4*piMinusIndex);
+      }
+    }
     std::vector<double> P(DaughterMomenta.begin(), DaughterMomenta.end());
     std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
     BinNumber_4Bins = aph4.WhichBin(Event(P));
