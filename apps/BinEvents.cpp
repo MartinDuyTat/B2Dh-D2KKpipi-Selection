@@ -5,21 +5,24 @@
  * @param 2 Name of TTree
  * @param 3 Name of ROOT output file
  * @param 4 Year of dataset
+ * @param 5 Filename of text file with prefixes of daughter momenta in ntuple
  */
 
 #include<iostream>
 #include<vector>
 #include<cstdlib>
 #include<algorithm>
+#include<fstream>
 #include"TBranch.h"
 #include"TFile.h"
 #include"TTree.h"
 #include"Event.h"
+#include"Utilities.h"
 #include"AmplitudePhaseSpace.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 5) {
-    std::cout << "Need 4 input arguments\n";
+  if(argc != 6) {
+    std::cout << "Need 5 input arguments\n";
     return 0;
   }
   std::cout << "Loading ROOT input file...\n";
@@ -36,36 +39,19 @@ int main(int argc, char *argv[]) {
   OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
   std::cout << "Booking variables...\n";
-  std::vector<Double_t> DaughterMomenta(16);
-  std::vector<Double_t> DaughterIDs(4);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_ID", DaughterIDs.data() + 0);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_ID", DaughterIDs.data() + 1);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_ID", DaughterIDs.data() + 2);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PX", DaughterMomenta.data() + 0);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PY", DaughterMomenta.data() + 1);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PZ", DaughterMomenta.data() + 2);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_PE", DaughterMomenta.data() + 3);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_PX", DaughterMomenta.data() + 4);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_PY", DaughterMomenta.data() + 5);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_PZ", DaughterMomenta.data() + 6);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_Kplus_0_PE", DaughterMomenta.data() + 7);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PX", DaughterMomenta.data() + 8);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PY", DaughterMomenta.data() + 9);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PZ", DaughterMomenta.data() + 10);
-  Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_PE", DaughterMomenta.data() + 11);
-  if(std::stoi(argv[4]) == 2011 || std::stoi(argv[4]) == 2012) {
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_ID", DaughterIDs.data() + 3);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PX", DaughterMomenta.data() + 12);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PY", DaughterMomenta.data() + 13);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PZ", DaughterMomenta.data() + 14);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_0_PE", DaughterMomenta.data() + 15);
-  } else {
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_ID", DaughterIDs.data() + 3);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PX", DaughterMomenta.data() + 12);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PY", DaughterMomenta.data() + 13);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PZ", DaughterMomenta.data() + 14);
-    Tree->SetBranchAddress("Bu_constD0PV_D0_piplus_1_PE", DaughterMomenta.data() + 15);
+  std::vector<Float_t> DaughterMomenta(16);
+  std::vector<Float_t> DaughterIDs(4);
+  std::ifstream PrefixFile(argv[5]);
+  for(int i = 0; i < 4; i++) {
+    std::string DaughterPrefix;
+    PrefixFile >> DaughterPrefix;
+    Tree->SetBranchAddress((DaughterPrefix + "_ID").c_str(), DaughterIDs.data() + i);
+    std::vector<std::string> PP{"_PX", "_PY", "_PZ", "_PE"};
+    for(int j = 0; j < 4; j++) {
+      Tree->SetBranchAddress((DaughterPrefix + PP[j]).c_str(), DaughterMomenta.data() + j + 4*i);
+    }
   }
+  PrefixFile.close();
   std::cout << "Variables ready\n";
   std::cout << "Preparing binning scheme...\n";
   AmplitudePhaseSpace aph4(4), aph6(6), aph8(8);
@@ -79,28 +65,7 @@ int main(int argc, char *argv[]) {
   std::cout << "Binning events...\n";
   for(int i = 0; i < Tree->GetEntries(); i++) {
     Tree->GetEntry(i);
-    if(std::stoi(argv[4]) == 2011 || std::stoi(argv[4]) == 2012) {
-      int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
-      if(KPlusIndex != 0) {
-	std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);
-	std::swap_ranges(DaughterMomenta.begin() + 0, DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 4*KPlusIndex);
-      }
-      int KMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -321) - DaughterIDs.begin();
-      if(KMinusIndex != 0) {
-	std::swap(DaughterIDs[1], DaughterIDs[KMinusIndex]);
-	std::swap_ranges(DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 4*KMinusIndex);
-      }
-      int piPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 211) - DaughterIDs.begin();
-      if(piPlusIndex != 0) {
-	std::swap(DaughterIDs[2], DaughterIDs[piPlusIndex]);
-	std::swap_ranges(DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 4*piPlusIndex);
-      }
-      int piMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -211) - DaughterIDs.begin();
-      if(piMinusIndex != 0) {
-	std::swap(DaughterIDs[3], DaughterIDs[piMinusIndex]);
-	std::swap_ranges(DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 16, DaughterMomenta.begin() + 4*piMinusIndex);
-      }
-    }
+    Utilities::RearrangeDaughterMomenta(DaughterIDs, DaughterMomenta);
     std::vector<double> P(DaughterMomenta.begin(), DaughterMomenta.end());
     std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
     BinNumber_4Bins = aph4.WhichBin(Event(P));

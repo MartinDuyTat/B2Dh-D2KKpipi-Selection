@@ -3,6 +3,7 @@
 #include<string>
 #include<iostream>
 #include<fstream>
+#include<algorithm>
 #include"TChain.h"
 #include"TString.h"
 #include"TMVA/DataLoader.h"
@@ -43,9 +44,9 @@ namespace Utilities {
     if(CutType == "SignalTraining") {
       return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year}};
     } else if(CutType == "KpipipiSingleMisID") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single"}};
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single", true, true, true, true, false, true}};
     } else if(CutType == "KpipipiTripleMisID") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple"}};
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple", true, true, true, true, false, true}};
     } else if(CutType == "BackgroundTraining") {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{Year}};
     } else if(CutType == "PrepareBDT") {
@@ -68,6 +69,29 @@ namespace Utilities {
       TrainingVariablesFile.close();
     }
     return;
+  }
+
+  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta) {
+    int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
+    if(KPlusIndex != 0) {
+      std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);
+      std::swap_ranges(DaughterMomenta.begin() + 0, DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 4*KPlusIndex);
+    }
+    int KMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -321) - DaughterIDs.begin();
+    if(KMinusIndex != 1) {
+      std::swap(DaughterIDs[1], DaughterIDs[KMinusIndex]);
+      std::swap_ranges(DaughterMomenta.begin() + 4, DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 4*KMinusIndex);
+    }
+    int piPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 211) - DaughterIDs.begin();
+    if(piPlusIndex != 2) {
+      std::swap(DaughterIDs[2], DaughterIDs[piPlusIndex]);
+      std::swap_ranges(DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 4*piPlusIndex);
+    }
+    int piMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -211) - DaughterIDs.begin();
+    if(piMinusIndex != 3) {
+      std::swap(DaughterIDs[3], DaughterIDs[piMinusIndex]);
+      std::swap_ranges(DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 16, DaughterMomenta.begin() + 4*piMinusIndex);
+    }
   }
 
 }

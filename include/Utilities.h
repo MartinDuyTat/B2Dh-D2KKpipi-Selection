@@ -29,4 +29,10 @@ namespace Utilities {
    * @param Filename Filename of text file with training variables
    */
   void LoadTrainingVariables(TMVA::DataLoader *DataLoader, std::string Filename);
+  /**
+   * A helper function for rearranging a list of daughter momenta so that they end up in the order K+ K- pi+ pi-
+   * @param DaughterIDs A vector with the four daughter IDs in the same order as the momenta
+   * @param DaughterMomenta A vector with the four daughter momenta
+   */
+  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta);
 }
