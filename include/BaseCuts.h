@@ -7,6 +7,7 @@
 #ifndef BASECUTS
 #define BASECUTS
 
+#include<string>
 #include"TCut.h"
 
 class BaseCuts {
@@ -22,7 +23,7 @@ class BaseCuts {
      * @param TriggerCuts Set to true to apply trigger requirements
      * @param BMassCut Set to true to apply cuts on \f$B\f$ mass
      */
-    BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
+    BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = false, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
     /**
      * Trivial destructor
      */
@@ -59,6 +60,18 @@ class BaseCuts {
      * Get all activated cuts as a TCut object
      */
     virtual TCut GetCuts() const;
+    /**
+     * Set the variable name of the \f$B\f$ mass
+     */
+    void SetBMassName(const std::string &BMassName);
+    /**
+     * Set the variable name of the \f$D\f$ mass
+     */
+    void SetDMassName(const std::string &DMassName);
+    /**
+     * Set the variable name DTF status
+     */
+    void SetDTFStatusName(const std::string &DTFStatusName);
   private:
     /**
      * Year dataset was taken
@@ -92,6 +105,18 @@ class BaseCuts {
      * Flag for \f$B\f$ mass cut
      */
     bool m_BMassCut;
+    /**
+     * Variable name of the \f$B\f$ mass
+     */
+    std::string m_BMassName;
+    /**
+     * Variable name of the \f$D\f$ mass
+     */
+    std::string m_DMassName;
+    /**
+     * Variable name DTF status
+     */
+    std::string m_DTFStatusName;
 };
 
 #endif

@@ -1,9 +1,10 @@
 // Martin Duy Tat 25th February 2021
 
+#include<string>
 #include"BaseCuts.h"
 #include"TCut.h"
 
-BaseCuts::BaseCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCut, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCut(DecayTreeFitCut), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCut(BMassCut) {
+BaseCuts::BaseCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCut, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCut(DecayTreeFitCut), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCut(BMassCut), m_BMassName("Bu_constD0PV_M"), m_DMassName("D0_M"), m_DTFStatusName("Bu_constD0PV_status") {
 }
 
 BaseCuts::~BaseCuts() {
@@ -18,11 +19,13 @@ TCut BaseCuts::KaonDaughterCuts() const {
 }
 
 TCut BaseCuts::DecayTreeFitCut() const {
-  return TCut("Bu_constD0PV_status == 0");
+  std::string Cut = m_DTFStatusName + std::string(" == 0");
+  return TCut(Cut.c_str());
 }
 
 TCut BaseCuts::DMassCut() const {
-  return TCut("abs(D0_DM) < 25");
+  std::string Cut = m_DMassName + std::string(" > 1839.84 && ") + m_DMassName + std::string(" < 1889.84");
+  return TCut(Cut.c_str());
 }
 
 TCut BaseCuts::LoosePIDCuts() const {
@@ -44,7 +47,8 @@ TCut BaseCuts::TriggerCuts() const {
 }
 
 TCut BaseCuts::BMassCut() const {
-  return TCut("Bu_constD0PV_M > 5080 && Bu_constD0PV_M < 5800");
+  std::string Cut = m_BMassName + std::string(" > 5080 && ") + m_BMassName + std::string(" < 5800");
+  return TCut(Cut.c_str());
 }
 
 TCut BaseCuts::GetCuts() const {
@@ -71,4 +75,16 @@ TCut BaseCuts::GetCuts() const {
     Cuts = Cuts && BMassCut();
   }
   return Cuts;
+}
+
+void BaseCuts::SetBMassName(const std::string &BMassName) {
+  m_BMassName = BMassName;
+}
+
+void BaseCuts::SetDMassName(const std::string &DMassName) {
+  m_DMassName = DMassName;
+}
+
+void BaseCuts::SetDTFStatusName(const std::string &DTFStatusName) {
+  m_DTFStatusName = DTFStatusName;
 }

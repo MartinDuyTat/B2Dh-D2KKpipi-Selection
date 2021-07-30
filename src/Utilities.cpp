@@ -13,14 +13,28 @@
 #include"CharmlessCuts.h"
 
 namespace Utilities {
-  void LoadChain(TChain *Chain, int NumberFiles, std::string Filename, std::string DecayMode) {
+  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode) {
     std::cout << "Initializing TChain...\n";
-    if(DecayMode == "pi") {
-      Chain->SetName("B2DPi_D2KKPiPi/DecayTree");
-    } else if(DecayMode == "K") {
-      Chain->SetName("B2DK_D2KKPiPi/DecayTree");
+    if(DDecayMode == "KKpipi") {
+      if(BDecayMode == "pi") {
+	Chain->SetName("B2DPi_D2KKPiPi/DecayTree");
+      } else if(BDecayMode == "K") {
+	Chain->SetName("B2DK_D2KKPiPi/DecayTree");
+      } else {
+	std::cout << "Decay mode " << BDecayMode << " unknown\n";
+	return;
+      }
+    } else if(DDecayMode == "Kpipipi") {
+      if(BDecayMode == "pi") {
+	Chain->SetName("B2DPi_D2KPiPiPi/DecayTree");
+      } else if(BDecayMode == "K") {
+	Chain->SetName("B2DK_D2KPiPiPi/DecayTree");
+      } else {
+	std::cout << "Decay mode " << BDecayMode << " unknown\n";
+	return;
+      }
     } else {
-      std::cout << "Decay mode " << DecayMode << " unknown\n";
+      std::cout << "Decay mode " << DDecayMode << " unknown\n";
       return;
     }
     std::cout << "TChain initialized\n";
@@ -44,9 +58,17 @@ namespace Utilities {
     if(CutType == "SignalTraining") {
       return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year}};
     } else if(CutType == "KpipipiSingleMisID") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single", true, true, true, true, false, true}};
+      Cuts->SetBMassName("Bu_constD0PV_SingleMisID_M");
+      Cuts->SetDMassName("Bu_const_SingleMisID_D0_M");
+      Cuts->SetDTFStatusName("0");
+      return Cuts;
     } else if(CutType == "KpipipiTripleMisID") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple", true, true, true, true, false, true}};
+      Cuts->SetBMassName("Bu_constD0PV_TripleMisID_M");
+      Cuts->SetDMassName("Bu_const_TripleMisID_D0_M");
+      Cuts->SetDTFStatusName("0");
+      return Cuts;
     } else if(CutType == "BackgroundTraining") {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{Year}};
     } else if(CutType == "PrepareBDT") {

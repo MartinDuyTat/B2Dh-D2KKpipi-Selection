@@ -14,9 +14,10 @@ namespace Utilities {
    * @param Chain TChain we want to add files to
    * @param NumberFiles Number of files to add to TChainn
    * @param Filename If there's a single input file, input full path name, otherwise input the path name without the number and file extension (e.g. if filenames are myfile0.root, myfile1.root, etc input myfile)
-   * @param DecayMode Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
+   * @param BDecayMode Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
+   * @param DDecayMode Input "KKpipi" for \f$D\to KK\pi\pi\f$ and "Kpipipi" for \f$D\to K\pi\pi\pi\f$
    */
-  void LoadChain(TChain *Chain, int NumberFiles, std::string Filename, std::string DecayMode);
+  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode);
   /**
    * LoadCuts is a function for picking the correct cuts
    * @param CutType User input string with cut type

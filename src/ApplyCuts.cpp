@@ -17,7 +17,6 @@ TTree* ApplyCuts::operator()(TTree *InputTree) const {
     InputTree->SetBranchStatus("Bu_constD0PV_M", 0);
   }
   TTree *OutputTree = InputTree->CloneTree(0);
-  OutputTree->SetDirectory(0);
   Float_t Bu_constD0PV_M;
   if(m_CopyDTFBranch) {
     InputTree->SetBranchStatus("Bu_constD0PV_M", 1);

@@ -33,7 +33,13 @@ int main(int argc, char *argv[]) {
   }
   std::cout << "Preparing sample with the " << argv[1] << " cuts\n";
   TChain Chain;
-  Utilities::LoadChain(&Chain, std::atoi(argv[2]), std::string(argv[3]), std::string(argv[4]));
+  std::string DDecayMode;
+  if(std::string(argv[1]).find("Kpipipi") == std::string::npos) {
+    DDecayMode = "KKpipi";
+  } else {
+    DDecayMode = "Kpipipi";
+  }
+  Utilities::LoadChain(&Chain, std::atoi(argv[2]), std::string(argv[3]), std::string(argv[4]), DDecayMode);
   std::cout << "Applying selection...\n";
   std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(std::string(argv[1]), std::string(argv[4]), std::atoi(argv[5]));
   ApplyCuts applyCuts(Cuts->GetCuts());
