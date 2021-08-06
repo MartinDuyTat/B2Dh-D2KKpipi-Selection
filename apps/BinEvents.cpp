@@ -2,10 +2,9 @@
 /**
  * BinEvents is an application that determines the bin number for each event and saves it to the ROOT file
  * @param 1 Name of ROOT file with B events
- * @param 2 Name of TTree
- * @param 3 Name of ROOT output file
- * @param 4 Year of dataset
- * @param 5 Filename of text file with prefixes of daughter momenta in ntuple
+ * @param 2 Name of ROOT output file
+ * @param 3 Filename of text file with prefixes of daughter momenta in ntuple
+ * @param 4 Units of daughter momenta, "GeV" or "MeV"
  */
 
 #include<iostream>
@@ -20,18 +19,27 @@
 #include"Utilities.h"
 #include"AmplitudePhaseSpace.h"
 
+std::string ReplaceSubstring(std::string Line, const std::string &From, const std::string &To) {
+  std::string::size_type Start = Line.find(From);
+  if(Start == std::string::npos) {
+    return Line;
+  }
+  Line.replace(Start, From.length(), To);
+  return Line;
+}
+
 int main(int argc, char *argv[]) {
-  if(argc != 6) {
-    std::cout << "Need 5 input arguments\n";
+  if(argc != 5) {
+    std::cout << "Need 4 input arguments\n";
     return 0;
   }
   std::cout << "Loading ROOT input file...\n";
   TFile Infile(argv[1], "READ");
   TTree *Tree = nullptr;
-  Infile.GetObject(argv[2], Tree);
+  Infile.GetObject("DecayTree", Tree);
   std::cout << "Input file ready\n";
   std::cout << "Creating output ROOT file...\n";
-  TFile Outfile(argv[3], "RECREATE");
+  TFile Outfile(argv[2], "RECREATE");
   TTree *OutTree = Tree->CloneTree(0);
   int BinNumber_4Bins, BinNumber_6Bins, BinNumber_8Bins;
   OutTree->Branch("BinNumber_4Bins", &BinNumber_4Bins, "BinNumber_4Bins/I");
@@ -39,19 +47,23 @@ int main(int argc, char *argv[]) {
   OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
   std::cout << "Booking variables...\n";
-  std::vector<Float_t> DaughterMomenta(16);
-  std::vector<Float_t> DaughterIDs(4);
-  std::ifstream PrefixFile(argv[5]);
+  std::vector<Double_t> DaughterMomenta(16);
+  std::vector<Double_t> DaughterIDs(4);
+  std::ifstream DaughterNameFile(argv[3]);
+  std::string IDName;
+  std::vector<std::string> PP(4);
+  DaughterNameFile >> IDName >> PP[0] >> PP[1] >> PP[2] >> PP[3];
   for(int i = 0; i < 4; i++) {
-    std::string DaughterPrefix;
-    PrefixFile >> DaughterPrefix;
-    Tree->SetBranchAddress((DaughterPrefix + "_ID").c_str(), DaughterIDs.data() + i);
-    std::vector<std::string> PP{"_PX", "_PY", "_PZ", "_PE"};
+    std::string DaughterName;
+    DaughterNameFile >> DaughterName;
+    std::string NewDaughterName = ReplaceSubstring(DaughterName, "**", IDName);
+    Tree->SetBranchAddress(NewDaughterName.c_str(), DaughterIDs.data() + i);
     for(int j = 0; j < 4; j++) {
-      Tree->SetBranchAddress((DaughterPrefix + PP[j]).c_str(), DaughterMomenta.data() + j + 4*i);
+      std::string NewDaughterName = ReplaceSubstring(DaughterName, "**", PP[j]);
+      Tree->SetBranchAddress(NewDaughterName.c_str(), DaughterMomenta.data() + j + 4*i);
     }
   }
-  PrefixFile.close();
+  DaughterNameFile.close();
   std::cout << "Variables ready\n";
   std::cout << "Preparing binning scheme...\n";
   AmplitudePhaseSpace aph4(4), aph6(6), aph8(8);
@@ -67,7 +79,9 @@ int main(int argc, char *argv[]) {
     Tree->GetEntry(i);
     Utilities::RearrangeDaughterMomenta(DaughterIDs, DaughterMomenta);
     std::vector<double> P(DaughterMomenta.begin(), DaughterMomenta.end());
-    std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
+    if(std::string(argv[4]) == "MeV") {
+      std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
+    }
     BinNumber_4Bins = aph4.WhichBin(Event(P));
     BinNumber_6Bins = aph6.WhichBin(Event(P));
     BinNumber_8Bins = aph8.WhichBin(Event(P));
