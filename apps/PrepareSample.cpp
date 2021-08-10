@@ -1,4 +1,4 @@
-// Martin Duy Tat 25th Februrary 2021
+// Martin Duy Tat 25th February 2021
 /**
  * PrepareSample takes in a ROOT file from DaVinci and creates a new ROOT file with a selection of the events based on cuts
  * The possible cut options are:
@@ -14,6 +14,7 @@
  * @param 4 Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
  * @param 5 Year of dataset
  * @param 6 Filename of output ROOT file
+ * @param 7 Text file with list of branches to keep
  */
 
 #include<iostream>
@@ -27,10 +28,17 @@
 #include"Utilities.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 7) {
-    std::cout << "Please input 6 arguments\n";
+  if(argc != 8) {
+    std::cout << "Please input 7 arguments\n";
     return 0;
   }
+  std::string CutType(argv[1]);
+  int NFiles = std::atoi(argv[2]);
+  std::string Filename(argv[3]);
+  std::string BDecayMode(argv[4]);
+  int Year = std::atoi(argv[5]);
+  std::string OutputFilename(argv[6]);
+  std::string BranchFile(argv[7]);
   std::cout << "Preparing sample with the " << argv[1] << " cuts\n";
   TChain Chain;
   std::string DDecayMode;
@@ -39,11 +47,11 @@ int main(int argc, char *argv[]) {
   } else {
     DDecayMode = "Kpipipi";
   }
-  Utilities::LoadChain(&Chain, std::atoi(argv[2]), std::string(argv[3]), std::string(argv[4]), DDecayMode);
+  Utilities::LoadChain(&Chain, NFiles, Filename, BDecayMode, DDecayMode, BranchFile);
   std::cout << "Applying selection...\n";
-  std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(std::string(argv[1]), std::string(argv[4]), std::atoi(argv[5]));
+  std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(CutType, BDecayMode, Year);
   ApplyCuts applyCuts(Cuts->GetCuts());
-  TFile OutputFile(argv[6], "RECREATE");
+  TFile OutputFile(OutputFilename.c_str(), "RECREATE");
   TTree *OutputTree = applyCuts(&Chain);
   std::cout << "TTree with selection ready...\n";
   std::cout << "Saving file...\n";

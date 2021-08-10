@@ -13,7 +13,7 @@
 #include"CharmlessCuts.h"
 
 namespace Utilities {
-  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode) {
+  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode, const std::string &BranchFilename) {
     std::cout << "Initializing TChain...\n";
     if(DDecayMode == "KKpipi") {
       if(BDecayMode == "pi") {
@@ -51,7 +51,15 @@ namespace Utilities {
       }
     }
     std::cout << "ROOT files added to TChain\n";
-    return;
+    Chain->SetBranchStatus("*", 0);
+    std::ifstream BranchFile(BranchFilename);
+    std::string word;
+    std::cout << "The following branches are activated:\n";
+    while(BranchFile >> word) {
+      Chain->SetBranchStatus(word.c_str(), 1);
+      std::cout << word << "\n";
+    }
+    BranchFile.close();
   }
 
   std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, std::string DecayMode, int Year) {
@@ -90,10 +98,9 @@ namespace Utilities {
       }
       TrainingVariablesFile.close();
     }
-    return;
   }
 
-  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta) {
+  void RearrangeDaughterMomenta(std::vector<double> &DaughterIDs, std::vector<double> &DaughterMomenta) {
     int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
     if(KPlusIndex != 0) {
       std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);
