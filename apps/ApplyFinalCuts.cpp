@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
   if(std::string(argv[4]) == "yes") {
     OmitFSCut = true;
   }
-  FinalCuts Cuts{std::string(argv[2]), 0.75, !OmitBachCuts, false, !OmitFSCut};
-  ApplyCuts applyCuts(Cuts.GetCuts(), !OmitBachCuts);
+  FinalCuts Cuts{std::string(argv[2]), 0.00, !OmitBachCuts, true, !OmitFSCut};
+  ApplyCuts applyCuts(Cuts.GetCuts(), true);
   TFile OutputFile(argv[5], "RECREATE");
   TTree *OutputTree = applyCuts(InputTree);
   std::cout << "TTree with selection ready...\n";
