@@ -25,7 +25,7 @@ TCut FinalCuts::BachelorPIDCut() const {
 }
 
 TCut FinalCuts::KaonDaughterPIDCut() const {
-  return TCut("h1_PIDK > 0 && h2_PIDK > 0");
+  return TCut("h2_PIDK > 0");
 }
 
 TCut FinalCuts::FlightSignificanceCut() const {
