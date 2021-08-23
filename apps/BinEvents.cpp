@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
   OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
   std::cout << "Booking variables...\n";
-  std::vector<Double_t> DaughterMomenta(16);
-  std::vector<Double_t> DaughterIDs(4);
+  std::vector<Float_t> DaughterMomenta(16);
+  std::vector<Float_t> DaughterIDs(4);
   std::ifstream DaughterNameFile(argv[3]);
   std::string IDName;
   std::vector<std::string> PP(4);
@@ -73,10 +73,19 @@ int main(int argc, char *argv[]) {
   aph4.UseVariableBinWidths(true);
   aph6.UseVariableBinWidths(true);
   aph8.UseVariableBinWidths(true);
+  aph4.SetKSVeto(0.477, 0.507);
+  aph6.SetKSVeto(0.477, 0.507);
+  aph8.SetKSVeto(0.477, 0.507);
   std::cout << "Ready to bin events\n";
   std::cout << "Binning events...\n";
   for(int i = 0; i < Tree->GetEntries(); i++) {
     Tree->GetEntry(i);
+    if(std::find(DaughterIDs.begin(), DaughterIDs.end(), 0) != DaughterIDs.end()) {
+      BinNumber_4Bins = 0;
+      BinNumber_6Bins = 0;
+      BinNumber_8Bins = 0;
+      continue;
+    }
     Utilities::RearrangeDaughterMomenta(DaughterIDs, DaughterMomenta);
     std::vector<double> P(DaughterMomenta.begin(), DaughterMomenta.end());
     if(std::string(argv[4]) == "MeV") {
