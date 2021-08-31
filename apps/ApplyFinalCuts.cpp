@@ -7,7 +7,8 @@
  * @param 2 Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
  * @param 3 Input "yes" to omit Bachelor PID cuts
  * @param 4 Input "yes" to omit cut on flight significance
- * @param 5 Filename of output ROOT file
+ * @param 5 Input "yes" to omit cut on kaon daughter PIDs
+ * @param 6 Filename of output ROOT file
  */
 
 #include<iostream>
@@ -21,8 +22,8 @@
 #include"Utilities.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 6) {
-    std::cout << "Please input 5 arguments\n";
+  if(argc != 7) {
+    std::cout << "Please input 6 arguments\n";
     return 0;
   }
   std::cout << "Final event selection\n";
@@ -30,16 +31,19 @@ int main(int argc, char *argv[]) {
   TTree *InputTree = nullptr;
   InputData.GetObject("DecayTree", InputTree);
   std::cout << "Applying selection...\n";
-  bool OmitBachCuts = false, OmitFSCut = false;
+  bool OmitBachCuts = false, OmitFSCut = false, OmitDaughterPIDCut = false;
   if(std::string(argv[3]) == "yes") {
     OmitBachCuts = true;
   }
   if(std::string(argv[4]) == "yes") {
     OmitFSCut = true;
   }
-  FinalCuts Cuts{std::string(argv[2]), 0.00, !OmitBachCuts, true, !OmitFSCut};
+  if(std::string(argv[5]) == "yes") {
+    OmitDaughterPIDCut = true;
+  }
+  FinalCuts Cuts{std::string(argv[2]), 0.00, !OmitBachCuts, !OmitDaughterPIDCut, !OmitFSCut};
   ApplyCuts applyCuts(Cuts.GetCuts(), true);
-  TFile OutputFile(argv[5], "RECREATE");
+  TFile OutputFile(argv[6], "RECREATE");
   TTree *OutputTree = applyCuts(InputTree);
   std::cout << "TTree with selection ready...\n";
   std::cout << "Saving file...\n";
