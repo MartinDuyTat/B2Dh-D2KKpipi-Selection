@@ -4,7 +4,7 @@
 #include"BaseCuts.h"
 #include"TCut.h"
 
-BaseCuts::BaseCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCut, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCut(DecayTreeFitCut), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCut(BMassCut), m_BMassName("Bu_constD0PV_M"), m_DMassName("D0_M"), m_DTFStatusName("Bu_constD0PV_status") {
+BaseCuts::BaseCuts(const std::string &DDecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCut, bool DMassCut, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): m_DDecayMode(DDecayMode), m_Year(Year), m_BachelorCuts(BachelorCuts), m_KaonDaughterCuts(KaonDaughterCuts), m_DecayTreeFitCut(DecayTreeFitCut), m_DMassCut(DMassCut), m_LoosePIDCuts(LoosePIDCuts), m_TriggerCuts(TriggerCuts), m_BMassCut(BMassCut), m_BMassName("Bu_constD0PV_M"), m_DMassName("D0_M"), m_DTFStatusName("Bu_constD0PV_status") {
 }
 
 BaseCuts::~BaseCuts() {
@@ -29,7 +29,13 @@ TCut BaseCuts::DMassCut() const {
 }
 
 TCut BaseCuts::LoosePIDCuts() const {
-  return TCut("h1_PIDK > -10 && h2_PIDK > -10 && h3_PIDK < 20 && h4_PIDK < 20");
+  if(m_DDecayMode == "KKpipi") {
+    return TCut("h1_PIDK > -10 && h2_PIDK > -10 && h3_PIDK < 20 && h4_PIDK < 20");
+  } else if(m_DDecayMode == "pipipipi") {
+    return TCut("h1_PIDK < 20 && h2_PIDK < 20 && h3_PIDK < 20 && h4_PIDK < 20");
+  } else {
+    return TCut();
+  }
 }
 
 TCut BaseCuts::TriggerCuts() const {

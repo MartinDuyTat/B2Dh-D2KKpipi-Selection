@@ -1,10 +1,11 @@
 // Martin Duy Tat 25th February 2021
 
+#include<string>
 #include"TCut.h"
 #include"HighBMassCut.h"
 #include"BaseCuts.h"
 
-HighBMassCut::HighBMassCut(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
+HighBMassCut::HighBMassCut(const std::string &DDecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, false) {
 }
 
 HighBMassCut::~HighBMassCut() {

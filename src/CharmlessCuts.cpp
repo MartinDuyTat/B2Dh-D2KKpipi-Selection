@@ -1,10 +1,11 @@
 // Martin Duy Tat 19th March 2021
 
+#include<string>
 #include"TCut.h"
 #include"CharmlessCuts.h"
 #include"BaseCuts.h"
 
-CharmlessCuts::CharmlessCuts(int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, false, false, LoosePIDCuts, TriggerCuts, false), m_BMassCut(BMassCut) {
+CharmlessCuts::CharmlessCuts(const std::string &DDecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, false, false, LoosePIDCuts, TriggerCuts, false), m_BMassCut(BMassCut) {
 }
 
 CharmlessCuts::~CharmlessCuts() {

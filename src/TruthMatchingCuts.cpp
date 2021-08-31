@@ -4,7 +4,7 @@
 #include"TCut.h"
 #include"TruthMatchingCuts.h"
 
-TruthMatchingCuts::TruthMatchingCuts(const std::string &DecayMode, int Year, const std::string &MisID, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCuts): BaseCuts(Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode), m_MisID(MisID) {
+TruthMatchingCuts::TruthMatchingCuts(const std::string &DecayMode, const std::string &DDecayMode, int Year, const std::string &MisID, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCuts): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode), m_MisID(MisID) {
 }
 
 TruthMatchingCuts::~TruthMatchingCuts() {
@@ -20,9 +20,17 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
   TCut h2Truth("(abs(h2_TRUEID)          == 0 || abs(h2_TRUEID)          == 321) && "
                "(abs(h2_MC_MOTHER_ID)    == 0 || abs(h2_MC_MOTHER_ID)    == 421) && " 
                "(abs(h2_MC_GD_MOTHER_ID) == 0 || abs(h2_MC_GD_MOTHER_ID) == 521)");
+  if(m_DDecayMode == "pipipipi") {
+    h1Truth = TCut("(abs(h1_TRUEID)          == 0 || abs(h1_TRUEID)          == 211) && "
+		   "(abs(h1_MC_MOTHER_ID)    == 0 || abs(h1_MC_MOTHER_ID)    == 421) && " 
+		   "(abs(h1_MC_GD_MOTHER_ID) == 0 || abs(h1_MC_GD_MOTHER_ID) == 521)");
+    h2Truth = TCut("(abs(h2_TRUEID)          == 0 || abs(h2_TRUEID)          == 211) && "
+		   "(abs(h2_MC_MOTHER_ID)    == 0 || abs(h2_MC_MOTHER_ID)    == 421) && " 
+		   "(abs(h2_MC_GD_MOTHER_ID) == 0 || abs(h2_MC_GD_MOTHER_ID) == 521)");
+  }
   TCut h3Truth("(abs(h3_TRUEID)          == 0 || abs(h3_TRUEID)          == 211) && "
-               "(abs(h3_MC_MOTHER_ID)    == 0 || abs(h3_MC_MOTHER_ID)    == 421) && " 
-               "(abs(h3_MC_GD_MOTHER_ID) == 0 || abs(h3_MC_GD_MOTHER_ID) == 521)");
+	       "(abs(h3_MC_MOTHER_ID)    == 0 || abs(h3_MC_MOTHER_ID)    == 421) && " 
+	       "(abs(h3_MC_GD_MOTHER_ID) == 0 || abs(h3_MC_GD_MOTHER_ID) == 521)");
   if(m_MisID == "Single" || m_MisID == "Triple") {
     h2Truth = TCut("(abs(h2_TRUEID)          == 0 || abs(h2_TRUEID)          == 211) && "
 		   "(abs(h2_MC_MOTHER_ID)    == 0 || abs(h2_MC_MOTHER_ID)    == 421) && " 

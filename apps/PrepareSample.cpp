@@ -13,8 +13,9 @@
  * @param 3 If there's a single input file, input full path name, otherwise input the path name without the number and file extension (e.g. if filenames are myfile0.root, myfile1.root, etc input myfile)
  * @param 4 Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
  * @param 5 Year of dataset
- * @param 6 Filename of output ROOT file
- * @param 7 Text file with list of branches to keep
+ * @param 6 D decay mode
+ * @param 7 Filename of output ROOT file
+ * @param 8 Text file with list of branches to keep
  */
 
 #include<iostream>
@@ -28,8 +29,8 @@
 #include"Utilities.h"
 
 int main(int argc, char *argv[]) {
-  if(argc != 8) {
-    std::cout << "Please input 7 arguments\n";
+  if(argc != 9) {
+    std::cout << "Please input 8 arguments\n";
     return 0;
   }
   std::string CutType(argv[1]);
@@ -37,19 +38,14 @@ int main(int argc, char *argv[]) {
   std::string Filename(argv[3]);
   std::string BDecayMode(argv[4]);
   int Year = std::atoi(argv[5]);
-  std::string OutputFilename(argv[6]);
-  std::string BranchFile(argv[7]);
+  std::string DDecayMode(argv[6]);
+  std::string OutputFilename(argv[7]);
+  std::string BranchFile(argv[8]);
   std::cout << "Preparing sample with the " << argv[1] << " cuts\n";
   TChain Chain;
-  std::string DDecayMode;
-  if(std::string(argv[1]).find("Kpipipi") == std::string::npos) {
-    DDecayMode = "KKpipi";
-  } else {
-    DDecayMode = "Kpipipi";
-  }
   Utilities::LoadChain(&Chain, NFiles, Filename, BDecayMode, DDecayMode, BranchFile);
   std::cout << "Applying selection...\n";
-  std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(CutType, BDecayMode, Year);
+  std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(CutType, BDecayMode, DDecayMode, Year);
   ApplyCuts applyCuts(Cuts->GetCuts());
   TFile OutputFile(OutputFilename.c_str(), "RECREATE");
   TTree *OutputTree = applyCuts(&Chain);

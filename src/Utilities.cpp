@@ -24,6 +24,15 @@ namespace Utilities {
 	std::cout << "Decay mode " << BDecayMode << " unknown\n";
 	return;
       }
+    } else if(DDecayMode == "pipipipi") {
+      if(BDecayMode == "pi") {
+	Chain->SetName("B2DPi_D2PiPiPiPi/DecayTree");
+      } else if(BDecayMode == "K") {
+	Chain->SetName("B2DK_D2PiPiPiPi/DecayTree");
+      } else {
+	std::cout << "Decay mode " << BDecayMode << " unknown\n";
+	return;
+      }
     } else if(DDecayMode == "Kpipipi") {
       if(BDecayMode == "pi") {
 	Chain->SetName("B2DPi_D2KPiPiPi/DecayTree");
@@ -62,27 +71,27 @@ namespace Utilities {
     BranchFile.close();
   }
 
-  std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, std::string DecayMode, int Year) {
+  std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, const std::string &DecayMode, const std::string &DDecayMode, int Year) {
     if(CutType == "SignalTraining") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year}};
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year}};
     } else if(CutType == "KpipipiSingleMisID") {
-      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Single", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Single", true, true, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_SingleMisID_M");
       Cuts->SetDMassName("Bu_const_SingleMisID_D0_M");
       Cuts->SetDTFStatusName("0");
       return Cuts;
     } else if(CutType == "KpipipiTripleMisID") {
-      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, Year, "Triple", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Triple", true, true, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_TripleMisID_M");
       Cuts->SetDMassName("Bu_const_TripleMisID_D0_M");
       Cuts->SetDTFStatusName("0");
       return Cuts;
     } else if(CutType == "BackgroundTraining") {
-      return std::unique_ptr<BaseCuts>{new HighBMassCut{Year}};
+      return std::unique_ptr<BaseCuts>{new HighBMassCut{DDecayMode, Year}};
     } else if(CutType == "PrepareBDT") {
-      return std::unique_ptr<BaseCuts>{new BaseCuts{Year}};
+      return std::unique_ptr<BaseCuts>{new BaseCuts{DDecayMode, Year}};
     } else if(CutType == "PrepareCharmless") {
-      return std::unique_ptr<BaseCuts>{new CharmlessCuts{Year}};
+      return std::unique_ptr<BaseCuts>{new CharmlessCuts{DDecayMode, Year}};
     } else {
       std::cout << "Cut type not recognized\n";
       return std::unique_ptr<BaseCuts>{nullptr};
@@ -100,7 +109,7 @@ namespace Utilities {
     }
   }
 
-  void RearrangeDaughterMomenta(std::vector<double> &DaughterIDs, std::vector<double> &DaughterMomenta) {
+  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta) {
     int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
     if(KPlusIndex != 0) {
       std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);

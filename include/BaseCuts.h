@@ -14,6 +14,7 @@ class BaseCuts {
   public:
     /**
      * Default constructor with a few options, which are true by default
+     * @param "KKpipi" or "pipipipi"
      * @param Year Year of dataset
      * @param BachelorCuts Set to true to apply cuts on bachelor particle
      * @param KaonDaughterCuts Set to true to apply cuts on Kaon daugthers
@@ -23,7 +24,7 @@ class BaseCuts {
      * @param TriggerCuts Set to true to apply trigger requirements
      * @param BMassCut Set to true to apply cuts on \f$B\f$ mass
      */
-    BaseCuts(int Year, bool BachelorCuts = true, bool KaonDaughterCuts = false, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
+    BaseCuts(const std::string &DDecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = false, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
     /**
      * Trivial destructor
      */
@@ -72,7 +73,11 @@ class BaseCuts {
      * Set the variable name DTF status
      */
     void SetDTFStatusName(const std::string &DTFStatusName);
-  private:
+  protected:
+    /**
+     * "KKpipi" or "pipipipi"
+     */
+    std::string m_DDecayMode;
     /**
      * Year dataset was taken
      */

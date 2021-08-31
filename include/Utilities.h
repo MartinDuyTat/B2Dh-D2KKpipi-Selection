@@ -24,7 +24,7 @@ namespace Utilities {
    * @param CutType User input string with cut type
    * @return A smart pointer with the cut object
    */
-  std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, std::string DecayMode, int Year);
+  std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, const std::string &DecayMode, const std::string &DDecayMode, int Year);
   /**
    * LoadTrainingVariables is a function that loads all the training variables for the BDT, to change the variables used in BDT training please change this function
    * @param DataLoader DataLoader object that is used for the BDT training
@@ -36,5 +36,5 @@ namespace Utilities {
    * @param DaughterIDs A vector with the four daughter IDs in the same order as the momenta
    * @param DaughterMomenta A vector with the four daughter momenta
    */
-  void RearrangeDaughterMomenta(std::vector<double> &DaughterIDs, std::vector<double> &DaughterMomenta);
+  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta);
 }

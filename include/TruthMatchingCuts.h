@@ -16,7 +16,7 @@ class TruthMatchingCuts: public BaseCuts {
     /**
      * Constructor that sets the same options as BaseCuts, plus an option to truth match with mis-ID from Kpipipi
      */
-    TruthMatchingCuts(const std::string &DecayMode, int Year, const std::string &MisID = "", bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCuts = true);
+    TruthMatchingCuts(const std::string &DecayMode, const std::string &DDecayMode, int Year, const std::string &MisID = "", bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true, bool BMassCuts = true);
     /**
      * Trivial destructor
      */
