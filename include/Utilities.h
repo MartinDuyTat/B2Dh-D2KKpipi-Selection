@@ -13,12 +13,12 @@ namespace Utilities {
    * LoadChain is a function for creating and loading a TChain
    * @param Chain TChain we want to add files to
    * @param NumberFiles Number of files to add to TChainn
-   * @param Filename If there's a single input file, input full path name, otherwise input the path name without the number and file extension (e.g. if filenames are myfile0.root, myfile1.root, etc input myfile)
+   * @param Filename ROOT filename, can put in wildcards to TChain
    * @param BDecayMode Input "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
    * @param DDecayMode Input "KKpipi" for \f$D\to KK\pi\pi\f$ and "Kpipipi" for \f$D\to K\pi\pi\pi\f$
    * @param BranchFilename Text file with list of branches to keep
    */
-  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode, const std::string &BranchFilename);
+  void LoadChain(TChain *Chain, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode, const std::string &BranchFilename);
   /**
    * LoadCuts is a function for picking the correct cuts
    * @param CutType User input string with cut type
@@ -36,5 +36,5 @@ namespace Utilities {
    * @param DaughterIDs A vector with the four daughter IDs in the same order as the momenta
    * @param DaughterMomenta A vector with the four daughter momenta
    */
-  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta);
+  void RearrangeDaughterMomenta(std::vector<double> &DaughterIDs, std::vector<double> &DaughterMomenta);
 }

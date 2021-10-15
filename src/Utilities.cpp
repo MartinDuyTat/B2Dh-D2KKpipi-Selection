@@ -13,7 +13,7 @@
 #include"CharmlessCuts.h"
 
 namespace Utilities {
-  void LoadChain(TChain *Chain, int NumberFiles, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode, const std::string &BranchFilename) {
+  void LoadChain(TChain *Chain, const std::string &Filename, const std::string &BDecayMode, const std::string &DDecayMode, const std::string &BranchFilename) {
     std::cout << "Initializing TChain...\n";
     if(DDecayMode == "KKpipi") {
       if(BDecayMode == "pi") {
@@ -48,17 +48,7 @@ namespace Utilities {
     }
     std::cout << "TChain initialized\n";
     std::cout << "Loading input files...\n";
-    if(NumberFiles == 0) {
-      std::cout << "Need more than 0 input files\n";
-      return;
-    }
-    if(NumberFiles == 1) {
-      Chain->Add(Filename.c_str());
-    } else {
-      for(int i = 0; i < NumberFiles; i++) {
-	Chain->Add((Filename + std::to_string(i) + ".root").c_str());
-      }
-    }
+    Chain->Add(Filename.c_str());
     std::cout << "ROOT files added to TChain\n";
     Chain->SetBranchStatus("*", 0);
     std::ifstream BranchFile(BranchFilename);
@@ -74,6 +64,8 @@ namespace Utilities {
   std::unique_ptr<BaseCuts> LoadCuts(std::string CutType, const std::string &DecayMode, const std::string &DDecayMode, int Year) {
     if(CutType == "SignalTraining") {
       return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year}};
+    } else if(CutType == "SignalTrainingSmeared") {
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "", true, true, true, true, true, false}};
     } else if(CutType == "KpipipiSingleMisID") {
       auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Single", true, true, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_SingleMisID_M");
@@ -86,12 +78,18 @@ namespace Utilities {
       Cuts->SetDMassName("Bu_const_TripleMisID_D0_M");
       Cuts->SetDTFStatusName("0");
       return Cuts;
+    } else if(CutType == "KpipipiTopipipipiMisID") {
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "pipipipi", true, true, true, true, false, true}};
+      Cuts->SetBMassName("Bu_constD0PV_pipipipiMisID_M");
+      Cuts->SetDMassName("Bu_const_pipipipiMisID_D0_M");
+      Cuts->SetDTFStatusName("0");
+      return Cuts;
     } else if(CutType == "BackgroundTraining") {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{DDecayMode, Year}};
     } else if(CutType == "PrepareBDT") {
       return std::unique_ptr<BaseCuts>{new BaseCuts{DDecayMode, Year}};
     } else if(CutType == "PrepareCharmless") {
-      return std::unique_ptr<BaseCuts>{new CharmlessCuts{DDecayMode, Year}};
+      return std::unique_ptr<BaseCuts>{new CharmlessCuts{DDecayMode, Year, true, true, true, true, false}};
     } else {
       std::cout << "Cut type not recognized\n";
       return std::unique_ptr<BaseCuts>{nullptr};
@@ -109,7 +107,7 @@ namespace Utilities {
     }
   }
 
-  void RearrangeDaughterMomenta(std::vector<float> &DaughterIDs, std::vector<float> &DaughterMomenta) {
+  void RearrangeDaughterMomenta(std::vector<double> &DaughterIDs, std::vector<double> &DaughterMomenta) {
     int KPlusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), 321) - DaughterIDs.begin();
     if(KPlusIndex != 0) {
       std::swap(DaughterIDs[0], DaughterIDs[KPlusIndex]);

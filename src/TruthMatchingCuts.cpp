@@ -31,7 +31,7 @@ TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
   TCut h3Truth("(abs(h3_TRUEID)          == 0 || abs(h3_TRUEID)          == 211) && "
 	       "(abs(h3_MC_MOTHER_ID)    == 0 || abs(h3_MC_MOTHER_ID)    == 421) && " 
 	       "(abs(h3_MC_GD_MOTHER_ID) == 0 || abs(h3_MC_GD_MOTHER_ID) == 521)");
-  if(m_MisID == "Single" || m_MisID == "Triple") {
+  if(m_MisID == "Single" || m_MisID == "Triple" || m_DDecayMode == "pipipipi") {
     h2Truth = TCut("(abs(h2_TRUEID)          == 0 || abs(h2_TRUEID)          == 211) && "
 		   "(abs(h2_MC_MOTHER_ID)    == 0 || abs(h2_MC_MOTHER_ID)    == 421) && " 
 		   "(abs(h2_MC_GD_MOTHER_ID) == 0 || abs(h2_MC_GD_MOTHER_ID) == 521)");

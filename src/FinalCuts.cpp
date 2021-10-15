@@ -16,9 +16,9 @@ TCut FinalCuts::BDTCut() const {
 
 TCut FinalCuts::BachelorPIDCut() const {
   if(m_Mode == "pi") {
-    return TCut("Bach_PIDK < 4");
+    return TCut("Bach_PIDK < 4 && Bach_isMuon == 0");
   } else if(m_Mode == "K") {
-    return TCut("Bach_PIDK > 4");
+    return TCut("Bach_PIDK > 4 && Bach_isMuon == 0");
   } else {
     return TCut();
   }

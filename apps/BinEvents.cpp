@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
   OutTree->Branch("BinNumber_8Bins", &BinNumber_8Bins, "BinNumber_8Bins/I");
   std::cout << "Output ROOT file ready\n";
   std::cout << "Booking variables...\n";
-  std::vector<Float_t> DaughterMomenta(16);
-  std::vector<Float_t> DaughterIDs(4);
+  std::vector<double> DaughterMomenta(16);
+  std::vector<double> DaughterIDs(4);
   std::ifstream DaughterNameFile(argv[3]);
   std::string IDName;
   std::vector<std::string> PP(4);

@@ -11,7 +11,7 @@ BaseCuts::~BaseCuts() {
 }
 
 TCut BaseCuts::BachelorCuts() const {
-  return TCut("Bach_P < 100000 && Bach_hasRich == 1 && Bach_isMuon == 0");
+  return TCut("Bach_P < 100000 && Bach_hasRich == 1");
 }
 
 TCut BaseCuts::KaonDaughterCuts() const {
@@ -39,14 +39,35 @@ TCut BaseCuts::LoosePIDCuts() const {
 }
 
 TCut BaseCuts::TriggerCuts() const {
+  TCut TriggerCut;
   if(m_Year <= 2012) {
-    return TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
-                "(Bu_Hlt1TrackAllL0Decision_TOS == 1 ) && "
-	        "(Bu_Hlt2Topo2BodyBBDTDecision_TOS == 1 || Bu_Hlt2Topo3BodyBBDTDecision_TOS == 1 || Bu_Hlt2Topo4BodyBBDTDecision_TOS == 1)");
+    TriggerCut = TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
+                      "(Bu_Hlt1TrackAllL0Decision_TOS == 1)");
+    if(m_DDecayMode == "KKpipi") {
+      TriggerCut = TriggerCut && TCut("(Bu_Hlt2Topo2BodyBBDTDecision_TOS == 1 || "
+				      " Bu_Hlt2Topo3BodyBBDTDecision_TOS == 1 || "
+				      " Bu_Hlt2Topo4BodyBBDTDecision_TOS == 1 || "
+				      " Bu_Hlt2IncPhiDecision_TOS == 1)");
+    } else {
+      TriggerCut = TriggerCut && TCut("(Bu_Hlt2Topo2BodyBBDTDecision_TOS == 1 || "
+				      " Bu_Hlt2Topo3BodyBBDTDecision_TOS == 1 || "
+				      " Bu_Hlt2Topo4BodyBBDTDecision_TOS == 1)");
+    }
+    return TriggerCut;
   } else if (m_Year >= 2015 && m_Year <= 2018) {
-    return TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
-                "(Bu_Hlt1TrackMVADecision_TOS == 1 || Bu_Hlt1TwoTrackMVADecision_TOS == 1) && "
-	        "(Bu_Hlt2Topo2BodyDecision_TOS == 1 || Bu_Hlt2Topo3BodyDecision_TOS == 1 || Bu_Hlt2Topo4BodyDecision_TOS == 1)");
+    TriggerCut = TCut("(Bu_L0Global_TIS == 1 || Bu_L0HadronDecision_TOS == 1) && "
+                      "(Bu_Hlt1TrackMVADecision_TOS == 1 || Bu_Hlt1TwoTrackMVADecision_TOS == 1)");
+    if(m_DDecayMode == "KKpipi") {
+      TriggerCut = TriggerCut && TCut("(Bu_Hlt2Topo2BodyDecision_TOS == 1 ||"
+				      " Bu_Hlt2Topo3BodyDecision_TOS == 1 ||"
+				      " Bu_Hlt2Topo4BodyDecision_TOS == 1 ||"
+				      " Bu_Hlt2IncPhiDecision_TOS == 1)");
+    } else {
+      TriggerCut = TriggerCut && TCut("(Bu_Hlt2Topo2BodyDecision_TOS == 1 ||"
+				      " Bu_Hlt2Topo3BodyDecision_TOS == 1 ||"
+				      " Bu_Hlt2Topo4BodyDecision_TOS == 1)");
+    }
+    return TriggerCut;
   } else {
     return TCut();
   }
