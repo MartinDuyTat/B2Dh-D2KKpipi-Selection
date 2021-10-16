@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
   std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(CutType, BDecayMode, DDecayMode, Year);
   ApplyCuts applyCuts(Cuts->GetCuts());
   if(CutType == "SignalTrainingSmeared" && argc == 9) {
-    applyCuts = ApplyCuts(Cuts->GetCuts(), std::atof(argv[8]));
+    applyCuts = ApplyCuts(Cuts->GetCuts(), false, std::atof(argv[8]));
   }
   TFile OutputFile(OutputFilename.c_str(), "RECREATE");
   TTree *OutputTree = applyCuts(&Chain);
