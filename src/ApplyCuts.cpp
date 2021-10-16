@@ -33,13 +33,13 @@ TTree* ApplyCuts::operator()(TTree *InputTree) const {
     OutputTree->Branch("Bu_constD0PV_swapBachToPi_M", &Bu_constD0PV_swapBachToPi_M, "Bu_constD0PV_swapBachToPi_M/F");
   }
   for(Long64_t i = 0; i < elist->GetN(); i++) {
+    InputTree->GetEntry(InputTree->GetEntryNumber(i));
     if(m_Smearing != 0.0) {
       Bu_constD0PV_M += gRandom->Gaus(0.0, m_Smearing);
       if(Bu_constD0PV_M < 5080.0 || Bu_constD0PV_M > 5800.0) {
 	continue;
       }
     }
-    InputTree->GetEntry(InputTree->GetEntryNumber(i));
     OutputTree->Fill();
   }
   return OutputTree;
