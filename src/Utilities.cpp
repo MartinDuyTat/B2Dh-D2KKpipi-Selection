@@ -10,6 +10,7 @@
 #include"BaseCuts.h"
 #include"TruthMatchingCuts.h"
 #include"HighBMassCut.h"
+#include"CombinatorialBMassCut.h"
 #include"CharmlessCuts.h"
 
 namespace Utilities {
@@ -86,6 +87,8 @@ namespace Utilities {
       return Cuts;
     } else if(CutType == "BackgroundTraining") {
       return std::unique_ptr<BaseCuts>{new HighBMassCut{DDecayMode, Year}};
+    } else if(CutType == "CombinatorialBackground") {
+      return std::unique_ptr<BaseCuts>{new CombinatorialBMassCut{DDecayMode, Year}};
     } else if(CutType == "PrepareBDT") {
       return std::unique_ptr<BaseCuts>{new BaseCuts{DDecayMode, Year}};
     } else if(CutType == "PrepareCharmless") {
