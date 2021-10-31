@@ -53,6 +53,7 @@ int main(int argc, char *argv[]) {
   }
   TFile OutputFile(OutputFilename.c_str(), "RECREATE");
   TTree *OutputTree = applyCuts(&Chain);
+  OutputTree->SetAlias("zSig", "(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/(sqrt(D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR))");
   std::cout << "TTree with selection ready...\n";
   std::cout << "Saving file...\n";
   OutputTree->SetDirectory(&OutputFile);

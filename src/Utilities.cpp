@@ -92,7 +92,7 @@ namespace Utilities {
     } else if(CutType == "PrepareBDT") {
       return std::unique_ptr<BaseCuts>{new BaseCuts{DDecayMode, Year}};
     } else if(CutType == "PrepareCharmless") {
-      return std::unique_ptr<BaseCuts>{new CharmlessCuts{DDecayMode, Year, true, true, true, true, false}};
+      return std::unique_ptr<BaseCuts>{new CharmlessCuts{DDecayMode, Year}};
     } else {
       std::cout << "Cut type not recognized\n";
       return std::unique_ptr<BaseCuts>{nullptr};

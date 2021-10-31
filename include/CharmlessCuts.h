@@ -16,7 +16,7 @@ class CharmlessCuts: public BaseCuts {
     /**
      * Constructor that sets all same options for cuts as BaseCuts, with the exception of DMassCut, which is set as false as this is overridden in this class, and DecayTreeFit has been turned off
      */
-    CharmlessCuts(const std::string &DDecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
+    CharmlessCuts(const std::string &DDecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = false, bool LoosePIDCuts = true, bool TriggerCuts = true, bool BMassCut = true);
     /**
      * Tritial destructor
      */
@@ -33,11 +33,6 @@ class CharmlessCuts: public BaseCuts {
      * Get all activated cuts as a TCut object
      */
     virtual TCut GetCuts() const;
-  private:
-    /**
-     * Flag for \f$B\f$ mass cut
-     */
-    bool m_BMassCut;
 };
 
 #endif
