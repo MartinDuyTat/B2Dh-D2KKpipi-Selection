@@ -15,6 +15,10 @@ TCut CharmlessCuts::DMassCut() const {
   return TCut("(D0_M > 1770 && D0_M < 1820) || (D0_M > 1910 && D0_M < 1960)");
 }
 
+TCut CharmlessCuts::BMassCut() const {
+  return TCut("Bu_M > 5080 && Bu_M < 5800");
+}
+
 TCut CharmlessCuts::GetCuts() const {
-  return DMassCut() && BaseCuts::GetCuts();
+  return BaseCuts::GetCuts();
 }
