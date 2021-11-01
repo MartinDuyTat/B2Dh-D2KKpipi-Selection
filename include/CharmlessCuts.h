@@ -29,10 +29,6 @@ class CharmlessCuts: public BaseCuts {
      * Cut on \f$B\f$ mass, selecting the same range as before but using the reconstructed $B$ mass instead of the one from DecayTreeFitter
      */
     virtual TCut BMassCut() const;
-    /**
-     * Get all activated cuts as a TCut object
-     */
-    virtual TCut GetCuts() const;
 };
 
 #endif

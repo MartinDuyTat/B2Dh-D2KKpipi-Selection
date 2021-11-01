@@ -5,7 +5,7 @@
 #include"CharmlessCuts.h"
 #include"BaseCuts.h"
 
-CharmlessCuts::CharmlessCuts(const std::string &DDecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, false, false, LoosePIDCuts, TriggerCuts, BMassCut) {
+CharmlessCuts::CharmlessCuts(const std::string &DDecayMode, int Year, bool BachelorCuts, bool KaonDaughterCuts, bool LoosePIDCuts, bool TriggerCuts, bool BMassCut): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, false, true, LoosePIDCuts, TriggerCuts, BMassCut) {
 }
 
 CharmlessCuts::~CharmlessCuts() {
@@ -17,8 +17,4 @@ TCut CharmlessCuts::DMassCut() const {
 
 TCut CharmlessCuts::BMassCut() const {
   return TCut("Bu_M > 5080 && Bu_M < 5800");
-}
-
-TCut CharmlessCuts::GetCuts() const {
-  return BaseCuts::GetCuts();
 }
