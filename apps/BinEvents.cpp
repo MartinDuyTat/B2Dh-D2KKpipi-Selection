@@ -15,6 +15,7 @@
 #include"TBranch.h"
 #include"TFile.h"
 #include"TTree.h"
+#include"TChain.h"
 #include"Event.h"
 #include"Utilities.h"
 #include"AmplitudePhaseSpace.h"
@@ -34,13 +35,12 @@ int main(int argc, char *argv[]) {
     return 0;
   }
   std::cout << "Loading ROOT input file...\n";
-  TFile Infile(argv[1], "READ");
-  TTree *Tree = nullptr;
-  Infile.GetObject("DecayTree", Tree);
+  TChain Chain("DecayTree");
+  Chain.Add(argv[1]);
   std::cout << "Input file ready\n";
   std::cout << "Creating output ROOT file...\n";
   TFile Outfile(argv[2], "RECREATE");
-  TTree *OutTree = Tree->CloneTree(0);
+  TTree *OutTree = Chain.CloneTree(0);
   int BinNumber_4Bins, BinNumber_6Bins, BinNumber_8Bins;
   OutTree->Branch("BinNumber_4Bins", &BinNumber_4Bins, "BinNumber_4Bins/I");
   OutTree->Branch("BinNumber_6Bins", &BinNumber_6Bins, "BinNumber_6Bins/I");
@@ -57,10 +57,10 @@ int main(int argc, char *argv[]) {
     std::string DaughterName;
     DaughterNameFile >> DaughterName;
     std::string NewDaughterName = ReplaceSubstring(DaughterName, "**", IDName);
-    Tree->SetBranchAddress(NewDaughterName.c_str(), DaughterIDs.data() + i);
+    Chain.SetBranchAddress(NewDaughterName.c_str(), DaughterIDs.data() + i);
     for(int j = 0; j < 4; j++) {
       std::string NewDaughterName = ReplaceSubstring(DaughterName, "**", PP[j]);
-      Tree->SetBranchAddress(NewDaughterName.c_str(), DaughterMomenta.data() + j + 4*i);
+      Chain.SetBranchAddress(NewDaughterName.c_str(), DaughterMomenta.data() + j + 4*i);
     }
   }
   DaughterNameFile.close();
@@ -78,8 +78,8 @@ int main(int argc, char *argv[]) {
   aph8.SetKSVeto(0.477, 0.507);
   std::cout << "Ready to bin events\n";
   std::cout << "Binning events...\n";
-  for(int i = 0; i < Tree->GetEntries(); i++) {
-    Tree->GetEntry(i);
+  for(int i = 0; i < Chain.GetEntries(); i++) {
+    Chain.GetEntry(i);
     if(std::find(DaughterIDs.begin(), DaughterIDs.end(), 0) != DaughterIDs.end()) {
       BinNumber_4Bins = 0;
       BinNumber_6Bins = 0;
@@ -98,7 +98,6 @@ int main(int argc, char *argv[]) {
   }
   OutTree->Write();
   Outfile.Close();
-  Infile.Close();
   std::cout << "Events are placed in their respective bins\n";
   return 0;
 }

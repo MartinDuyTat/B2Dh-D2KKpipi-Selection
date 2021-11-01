@@ -126,11 +126,6 @@ namespace Utilities {
       std::swap(DaughterIDs[2], DaughterIDs[piPlusIndex]);
       std::swap_ranges(DaughterMomenta.begin() + 8, DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 4*piPlusIndex);
     }
-    int piMinusIndex = std::find(DaughterIDs.begin(), DaughterIDs.end(), -211) - DaughterIDs.begin();
-    if(piMinusIndex != 3) {
-      std::swap(DaughterIDs[3], DaughterIDs[piMinusIndex]);
-      std::swap_ranges(DaughterMomenta.begin() + 12, DaughterMomenta.begin() + 16, DaughterMomenta.begin() + 4*piMinusIndex);
-    }
   }
 
 }
