@@ -12,7 +12,6 @@
 #include<numeric>
 #include<random>
 #include<algorithm>
-#include"TChain.h"
 #include"TFile.h"
 #include"TTree.h"
 
@@ -23,15 +22,16 @@ int main(int argc, char *argv[]) {
   }
   std::cout << "Removing multiple candidates\n";
   std::cout << "Loading data...\n";
-  TChain Chain("DecayTree");
-  Chain.Add(argv[1]);
+  TFile Infile(argv[1], "READ");
+  TTree *InTree = nullptr;
+  Infile.GetObject("DecayTree", InTree);
   std::cout << "Data sample ready\n";
   std::cout << "Creating output TTree...\n";
   TFile OutputFile(argv[2], "RECREATE");
-  TTree *Tree = Chain.CloneTree(0);
+  TTree *Tree = InTree->CloneTree(0);
   std::cout << "TTree ready\n";
   std::cout << "Shuffling events...\n";
-  int N = Chain.GetEntries();
+  int N = InTree->GetEntries();
   std::vector<int> EventOrder(N);
   std::iota(EventOrder.begin(), EventOrder.end(), 0);
   int Seed = argc == 3 ? 9999 : std::stoi(argv[3]);
@@ -40,10 +40,11 @@ int main(int argc, char *argv[]) {
   std::cout << "Event order now random\n";
   std::cout << "Going through data and keeping first candidates...\n";
   ULong64_t eventNumber;
-  Chain.SetBranchAddress("eventNumber", &eventNumber);
+  InTree->SetBranchAddress("eventNumber", &eventNumber);
   std::vector<int> EventNumbers;
+  InTree->LoadBaskets();
   for(int i = 0; i < N; i++) {
-    Chain.GetEntry(EventOrder[i]);
+    InTree->GetEntry(EventOrder[i]);
     if(std::find(EventNumbers.begin(), EventNumbers.end(), eventNumber) == EventNumbers.end()) {
       EventNumbers.push_back(eventNumber);
     } else {
@@ -53,6 +54,8 @@ int main(int argc, char *argv[]) {
   }
   Tree->Write();
   OutputFile.Write();
+  OutputFile.Close();
+  Infile.Close();
   std::cout << "No more multiple candidates\n";
   return 0;
 }
