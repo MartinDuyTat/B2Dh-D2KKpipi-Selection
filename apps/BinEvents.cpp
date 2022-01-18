@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
   aph4.SetKSVeto(0.477, 0.507);
   aph6.SetKSVeto(0.477, 0.507);
   aph8.SetKSVeto(0.477, 0.507);
+  int CandidatesOutsidePhaseSpace = 0;
   std::cout << "Ready to bin events\n";
   std::cout << "Binning events...\n";
   for(int i = 0; i < Chain.GetEntries(); i++) {
@@ -94,10 +95,15 @@ int main(int argc, char *argv[]) {
     BinNumber_4Bins = aph4.WhichBin(Event(P));
     BinNumber_6Bins = aph6.WhichBin(Event(P));
     BinNumber_8Bins = aph8.WhichBin(Event(P));
+    if(BinNumber_8Bins == 0) {
+      CandidatesOutsidePhaseSpace++;
+      continue;
+    }
     OutTree->Fill();
   }
   OutTree->Write();
   Outfile.Close();
   std::cout << "Events are placed in their respective bins\n";
+  std::cout << "Removed " << CandidatesOutsidePhaseSpace << " candidates that were outside of phase space (KS veto)\n";
   return 0;
 }

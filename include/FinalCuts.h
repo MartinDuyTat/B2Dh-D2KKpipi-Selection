@@ -14,14 +14,15 @@ class FinalCuts {
   public:
     /**
      * Default constructor with a few options, which are true by default
-     * @param Mode "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
+     * @param BMode "pi" for \f$B\to D\pi\f$ and "K" for \f$B\to DK\f$
+     * @param DMode "KKpipi" or "pipipipi"
      * @param BDTcut BDT cut threshold (between \f$-1\f$ and \f$+1\f$)
      * @param BachelorPIDCut Set to true to apply PID cut on bachelor particle
      * @param KaonDaughterPIDCut Set to true to apply PID cut on kaon daughters
      * @param FlightSignificanceCut Set to true to apply cut on flight significance
      * @param DTFChi2Cut Set to true to apply cuts on DecayTreeFitter \f$\chi^2\f$ (not necessary because it's a BDT training variable)
      */
-    FinalCuts(std::string Mode, double BDTcut = 0.0, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = false);
+    FinalCuts(const std::string &BMode, const std::string &DMode, double BDTcut = 0.0, bool BachelorPIDCuts = true, bool KaonDaughterPIDCut = true, bool FlightSignificanceCut = true, bool DTFChi2Cut = false, bool KSVeto = true);
     /**
      * Trivial destructor
      */
@@ -47,6 +48,11 @@ class FinalCuts {
      */
     TCut DTFChi2Cut() const;
     /**
+     * \f$K_S\f$ veto for the \f$\pi\pi\pi\pi\f$ mode
+     * For \f$KK\pi\pi$ the \f$K_S\f$ veto is already a part of the binning scheme
+     */
+    TCut KSVetoCut() const;
+    /**
      * Get all activated cuts as a TCut object
      */
     TCut GetCuts() const;
@@ -54,7 +60,11 @@ class FinalCuts {
     /**
      * B decay mode
      */
-    std::string m_Mode;
+    std::string m_BMode;
+    /**
+     * D decay mode
+     */
+    std::string m_DMode;
     /**
      * BDT cut threshold
      */
@@ -75,6 +85,10 @@ class FinalCuts {
      * Flag for DecayTreeFitter \f$\chi^2\f$ cut
      */
     bool m_DTFChi2Cut;
+    /**
+     * Flat for \f$K_S\f$ veto cut
+     */
+    bool m_KSVeto;
 };
 
 #endif
