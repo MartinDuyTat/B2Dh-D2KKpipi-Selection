@@ -16,7 +16,6 @@
 #include"TFile.h"
 #include"TTree.h"
 #include"TChain.h"
-#include"Event.h"
 #include"Utilities.h"
 #include"AmplitudePhaseSpace.h"
 
@@ -92,9 +91,9 @@ int main(int argc, char *argv[]) {
     if(std::string(argv[4]) == "MeV") {
       std::transform(P.begin(), P.end(), P.begin(), [](double &p) {return p/1000.0;});
     }
-    BinNumber_4Bins = aph4.WhichBin(Event(P));
-    BinNumber_6Bins = aph6.WhichBin(Event(P));
-    BinNumber_8Bins = aph8.WhichBin(Event(P));
+    BinNumber_4Bins = aph4.WhichBin(P);
+    BinNumber_6Bins = aph6.WhichBin(P);
+    BinNumber_8Bins = aph8.WhichBin(P);
     if(BinNumber_8Bins == 0) {
       CandidatesOutsidePhaseSpace++;
       continue;

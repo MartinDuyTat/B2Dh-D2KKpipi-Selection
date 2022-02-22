@@ -15,10 +15,9 @@ target_link_libraries(ApplyFinalCuts PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
 target_link_libraries(BDTClassifier PUBLIC B2DhD2KKPiPiSelection)
 target_link_libraries(BDTClassifier PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
 
-target_include_directories(BinEvents PUBLIC ${KKPIPI_BINNED_FIT_PATH}/include)
 target_link_libraries(BinEvents PUBLIC B2DhD2KKPiPiSelection)
 target_link_libraries(BinEvents PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
-target_link_libraries(BinEvents PUBLIC ${KKPIPI_BINNED_FIT_LIB} -ldl)
+target_link_libraries(BinEvents PUBLIC -ldl)
 
 target_link_libraries(CheckEventNumbers PUBLIC B2DhD2KKPiPiSelection)
 target_link_libraries(CheckEventNumbers PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
