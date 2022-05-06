@@ -66,21 +66,25 @@ namespace Utilities {
     if(CutType == "SignalTraining") {
       return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year}};
     } else if(CutType == "SignalTrainingSmeared") {
-      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "", true, true, true, true, true, false}};
+      return std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "", true, false, true, true, true, false}};
     } else if(CutType == "KpipipiSingleMisID") {
-      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Single", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Single", true, false, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_SingleMisID_M");
       Cuts->SetDMassName("Bu_const_SingleMisID_D0_M");
       Cuts->SetDTFStatusName("0");
       return Cuts;
+    } else if(CutType == "Kpipipipi0SingleMisID") {
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Single", true, false, true, true, true, true, true}};
+      Cuts->SetDTFStatusName("0");
+      return Cuts;
     } else if(CutType == "KpipipiTripleMisID") {
-      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Triple", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "Triple", true, false, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_TripleMisID_M");
       Cuts->SetDMassName("Bu_const_TripleMisID_D0_M");
       Cuts->SetDTFStatusName("0");
       return Cuts;
     } else if(CutType == "KpipipiTopipipipiMisID") {
-      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "pipipipi", true, true, true, true, false, true}};
+      auto Cuts = std::unique_ptr<BaseCuts>{new TruthMatchingCuts{DecayMode, DDecayMode, Year, "pipipipi", true, false, true, true, false, true}};
       Cuts->SetBMassName("Bu_constD0PV_pipipipiMisID_M");
       Cuts->SetDMassName("Bu_const_pipipipiMisID_D0_M");
       Cuts->SetDTFStatusName("0");

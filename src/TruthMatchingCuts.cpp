@@ -4,7 +4,7 @@
 #include"TCut.h"
 #include"TruthMatchingCuts.h"
 
-TruthMatchingCuts::TruthMatchingCuts(const std::string &DecayMode, const std::string &DDecayMode, int Year, const std::string &MisID, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCuts): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode), m_MisID(MisID) {
+TruthMatchingCuts::TruthMatchingCuts(const std::string &DecayMode, const std::string &DDecayMode, int Year, const std::string &MisID, bool BachelorCuts, bool KaonDaughterCuts, bool DecayTreeFitCuts, bool DMassCut, bool LoosePIDCuts, bool BMassCuts, bool PartReco): BaseCuts(DDecayMode, Year, BachelorCuts, KaonDaughterCuts, DecayTreeFitCuts, DMassCut, LoosePIDCuts, BMassCuts), m_DecayMode(DecayMode), m_MisID(MisID), m_PartReco(PartReco) {
 }
 
 TruthMatchingCuts::~TruthMatchingCuts() {
@@ -12,6 +12,9 @@ TruthMatchingCuts::~TruthMatchingCuts() {
 
 TCut TruthMatchingCuts::GetTruthMatchingCuts() const {
   TCut CategoryTruth("Bu_BKGCAT == 0 || Bu_BKGCAT == 50 || Bu_BKGCAT == 60");
+  if(m_PartReco) {
+    CategoryTruth = TCut("Bu_BKGCAT == 0 || Bu_BKGCAT == 40 || Bu_BKGCAT == 50 || Bu_BKGCAT == 60");
+  }
   TCut D0Truth("(abs(D0_TRUEID)          == 0 || abs(D0_TRUEID)          == 421) && "
                "(abs(D0_MC_MOTHER_ID)    == 0 || abs(D0_MC_MOTHER_ID)    == 521)");
   TCut h1Truth("(abs(h1_TRUEID)          == 0 || abs(h1_TRUEID)          == 321) && "

@@ -44,9 +44,6 @@ int main(int argc, char *argv[]) {
   Classifier->BookMVA("BDTG method", TString(argv[1]));
   std::cout << "Classifier ready to classify\n";
   for(Long64_t i = 0; i < InputData->GetEntries(); i++) {
-    if(i%1000 == 0) {
-      std::cout << "Processing event " << i << std::endl;
-    }
     InputData->GetEntry(i);
     Variables.UpdateVariables();
     BDToutput = Classifier->EvaluateMVA("BDTG method");

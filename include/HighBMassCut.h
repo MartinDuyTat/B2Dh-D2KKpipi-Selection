@@ -16,7 +16,7 @@ class HighBMassCut: public BaseCuts {
     /**
      * Constructor that sets all same options for cuts as BaseCuts, with the exception of BMassCuts, which is set as false as this is overridden in this class
      */
-    HighBMassCut(const std::string &DDecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = true, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true);
+    HighBMassCut(const std::string &DDecayMode, int Year, bool BachelorCuts = true, bool KaonDaughterCuts = false, bool DecayTreeFitCuts = true, bool DMassCut = true, bool LoosePIDCuts = true);
     /**
      * Tritial destructor
      */

@@ -9,6 +9,7 @@
  * "PrepareBDT", the standard base cuts before applying a BDT
  * "PrepareCharmless", similar to "PrepareBDT" but picks out the lower D mass sideband
  * "KpipipiSingleMisID", the standard base cuts and MC truth matching with single mis-ID of Kpipipi to KKpipi
+ * "Kpipipipi0SingleMisID", the standard base cuts and MC truth matching with single mis-ID of Kpipipipi0 to KKpipi
  * "KpipipiTripleMisID", the standard base cuts and MC truth matching with triple mis-ID of pipikpi to KKpipi
  * @param 1 Cut type as described above
  * @param 2 Filename of ROOT file, can have wild cards
@@ -44,7 +45,7 @@ int main(int argc, char *argv[]) {
   std::string BranchFile(argv[7]);
   std::cout << "Preparing sample with the " << argv[1] << " cuts\n";
   TChain Chain;
-  Utilities::LoadChain(&Chain, Filename, BDecayMode, DDecayMode, BranchFile);
+  Utilities::LoadChain(&Chain, Filename, BDecayMode, CutType == "Kpipipipi0SingleMisID" ? "KKpipi" : DDecayMode, BranchFile);
   std::cout << "Applying selection...\n";
   std::unique_ptr<BaseCuts> Cuts = Utilities::LoadCuts(CutType, BDecayMode, DDecayMode, Year);
   ApplyCuts applyCuts(Cuts->GetCuts());
