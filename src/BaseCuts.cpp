@@ -11,7 +11,7 @@ BaseCuts::~BaseCuts() {
 }
 
 TCut BaseCuts::BachelorCuts() const {
-  return TCut("Bach_P < 100000 && Bach_hasRich == 1");
+  return TCut("Bach_P < 100000 && Bach_hasRich == 1 && Bach_isMuon == 0");
 }
 
 TCut BaseCuts::KaonDaughterCuts() const {
