@@ -12,6 +12,7 @@
 #include<numeric>
 #include<random>
 #include<algorithm>
+#include<utility>
 #include"TFile.h"
 #include"TTree.h"
 
@@ -40,13 +41,18 @@ int main(int argc, char *argv[]) {
   std::cout << "Event order now random\n";
   std::cout << "Going through data and keeping first candidates...\n";
   ULong64_t eventNumber;
+  UInt_t runNumber;
   InTree->SetBranchAddress("eventNumber", &eventNumber);
-  std::vector<int> EventNumbers;
+  InTree->SetBranchAddress("runNumber", &runNumber);
+  std::vector<std::pair<ULong64_t, UInt_t>> EventRunNumbers;
   InTree->LoadBaskets();
   for(int i = 0; i < N; i++) {
     InTree->GetEntry(EventOrder[i]);
-    if(std::find(EventNumbers.begin(), EventNumbers.end(), eventNumber) == EventNumbers.end()) {
-      EventNumbers.push_back(eventNumber);
+    auto EventRunNumber = std::make_pair(eventNumber, runNumber);
+    if(std::find(EventRunNumbers.begin(),
+		 EventRunNumbers.end(),
+		 EventRunNumber) == EventRunNumbers.end()) {
+      EventRunNumbers.push_back(EventRunNumber);
     } else {
       continue;
     }
