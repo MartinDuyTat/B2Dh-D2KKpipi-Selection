@@ -1,6 +1,7 @@
 set(CMAKE_INSTALL_RPATH ${KKPIPI_BINNED_FIT_PATH}/lib)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+add_executable(Additional4piCuts Additional4piCuts.cpp)
 add_executable(ApplyFinalCuts ApplyFinalCuts.cpp)
 add_executable(BinEvents BinEvents.cpp)
 add_executable(CheckEventNumbers CheckEventNumbers.cpp)
@@ -9,6 +10,9 @@ add_executable(PrepareSample PrepareSample.cpp)
 add_executable(RemoveClones RemoveClones.cpp)
 add_executable(RemoveMultipleCandidates RemoveMultipleCandidates.cpp)
 add_executable(TrainBDT TrainBDT.cpp)
+
+target_link_libraries(Additional4piCuts PUBLIC B2DhD2KKPiPiSelection)
+target_link_libraries(Additional4piCuts PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
 
 target_link_libraries(ApplyFinalCuts PUBLIC B2DhD2KKPiPiSelection)
 target_link_libraries(ApplyFinalCuts PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree)
@@ -35,4 +39,4 @@ target_link_libraries(RemoveClones PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree ROO
 target_link_libraries(TrainBDT PUBLIC B2DhD2KKPiPiSelection)
 target_link_libraries(TrainBDT PUBLIC ROOT::Physics ROOT::RIO ROOT::Tree ROOT::TMVA)
 
-install(TARGETS ApplyFinalCuts BDTClassifier BinEvents CheckEventNumbers PrepareSample RemoveClones RemoveMultipleCandidates TrainBDT DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../bin)
+install(TARGETS Additional4piCuts ApplyFinalCuts BDTClassifier BinEvents CheckEventNumbers PrepareSample RemoveClones RemoveMultipleCandidates TrainBDT DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/../bin)

@@ -97,7 +97,7 @@ void BDTVariables::SetTreeBranchAddresses(TTree *Tree) {
     } else {
       Tree->SetBranchAddress((*Variables_iter)[2].c_str(), &m_TreeVariablesF[(*Variables_iter)[2]]);
     }
-    if((*Variables_iter)[0] == "log(min(x, y))" || (*Variables_iter)[0] == "log(max(x, y))") {
+    if((*Variables_iter)[0] == "log(min(x,y))" || (*Variables_iter)[0] == "log(max(x,y))") {
       Tree->SetBranchAddress((*Variables_iter)[3].c_str(), &m_TreeVariables[(*Variables_iter)[3]]);
     }
   }
