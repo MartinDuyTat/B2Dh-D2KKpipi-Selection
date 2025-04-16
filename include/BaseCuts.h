@@ -57,6 +57,15 @@ class BaseCuts {
      * Cut on \f$B\f$ mass after running DecayTreeFitter
      */
     virtual TCut BMassCut() const;
+    /** 
+     * Cut on flight significance
+     */
+    TCut FlightSignificanceCut() const;
+    /**
+     * \f$K_S\f$ veto for the \f$\pi\pi\pi\pi\f$ mode
+     * For \f$KK\pi\pi$ the \f$K_S\f$ veto is already a part of the binning scheme
+     */
+    TCut KSVetoCut() const;
     /**
      * Get all activated cuts as a TCut object
      */

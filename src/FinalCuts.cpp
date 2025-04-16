@@ -4,6 +4,8 @@
 #include"FinalCuts.h"
 #include"TCut.h"
 
+// The flight significance cut and KS veto were moved to BaseCuts.cpp very late in the analysis, so I've just left them here as well to avoid breaking any existing code
+
 FinalCuts::FinalCuts(const std::string &BMode, const std::string &DMode, double BDTcut, bool BachelorPIDCut, bool KaonDaughterPIDCut, bool FlightSignificanceCut, bool DTFChi2Cut, bool KSVeto): m_BMode(BMode), m_DMode(DMode), m_BDTcut(BDTcut), m_BachelorPIDCut(BachelorPIDCut), m_KaonDaughterPIDCut(KaonDaughterPIDCut), m_FlightSignificanceCut(FlightSignificanceCut), m_DTFChi2Cut(DTFChi2Cut), m_KSVeto(KSVeto) {
 }
 
@@ -37,15 +39,23 @@ TCut FinalCuts::DTFChi2Cut() const {
 }
 
 TCut FinalCuts::KSVetoCut() const {
-  std::string m13("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
-  std::string m14("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
-  std::string m23("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
-  std::string m24("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
-  TCut KSVeto13((m13 + " < 480 || " + m13 + " > 505").c_str());
-  TCut KSVeto14((m14 + " < 480 || " + m14 + " > 505").c_str());
-  TCut KSVeto23((m23 + " < 480 || " + m23 + " > 505").c_str());
-  TCut KSVeto24((m24 + " < 480 || " + m24 + " > 505").c_str());
-  return KSVeto13 && KSVeto14 && KSVeto23 && KSVeto24;
+  if(m_DMode == "pipipipi") {
+    std::string m13("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
+    std::string m14("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
+    std::string m23("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
+    std::string m24("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
+    TCut KSVeto13((m13 + " < 480 || " + m13 + " > 505").c_str());
+    TCut KSVeto14((m14 + " < 480 || " + m14 + " > 505").c_str());
+    TCut KSVeto23((m23 + " < 480 || " + m23 + " > 505").c_str());
+    TCut KSVeto24((m24 + " < 480 || " + m24 + " > 505").c_str());
+    return KSVeto13 && KSVeto14 && KSVeto23 && KSVeto24;
+  } else if(m_DMode == "KKpipi") {
+    std::string m34("sqrt((Bu_constD0PV_D0_h3_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h3_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h3_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h3_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
+    TCut KSVeto34((m34 + " < 477 || " + m34 + " > 507").c_str());
+    return KSVeto34;
+  } else {
+    throw std::invalid_argument("D mode " + m_DMode + " not a valid decay");
+  }
 }
 
 TCut FinalCuts::GetCuts() const {

@@ -1,6 +1,7 @@
 // Martin Duy Tat 25th February 2021
 
 #include<string>
+#include<stdexcept>
 #include"BaseCuts.h"
 #include"TCut.h"
 
@@ -78,6 +79,38 @@ TCut BaseCuts::BMassCut() const {
   return TCut(Cut.c_str());
 }
 
+TCut BaseCuts::FlightSignificanceCut() const {
+  return TCut("(D0_ENDVERTEX_Z - Bu_ENDVERTEX_Z)/(sqrt(D0_ENDVERTEX_ZERR*D0_ENDVERTEX_ZERR + Bu_ENDVERTEX_ZERR*Bu_ENDVERTEX_ZERR)) > 2.0");
+}
+
+TCut BaseCuts::KSVetoCut() const {
+  if(m_DDecayMode == "pipipipi") {
+    std::string m13("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
+    std::string m14("sqrt((Bu_constD0PV_D0_h1_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h1_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h1_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h1_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
+    std::string m23("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h3_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h3_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h3_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h3_PZ)^2)");
+    std::string m24("sqrt((Bu_constD0PV_D0_h2_PE + Bu_constD0PV_D0_h4_PE)^2 - (Bu_constD0PV_D0_h2_PX + Bu_constD0PV_D0_h4_PX)^2 - (Bu_constD0PV_D0_h2_PY + Bu_constD0PV_D0_h4_PY)^2 - (Bu_constD0PV_D0_h2_PZ + Bu_constD0PV_D0_h4_PZ)^2)");
+    TCut KSVeto13((m13 + " < 480 || " + m13 + " > 505").c_str());
+    TCut KSVeto14((m14 + " < 480 || " + m14 + " > 505").c_str());
+    TCut KSVeto23((m23 + " < 480 || " + m23 + " > 505").c_str());
+    TCut KSVeto24((m24 + " < 480 || " + m24 + " > 505").c_str());
+    return KSVeto13 && KSVeto14 && KSVeto23 && KSVeto24;
+  } else if(m_DDecayMode == "KKpipi") {
+    // This is really annoying but the particle ordering changes from event to event in Run 1...
+    std::string m13("sqrt((Bu_constD0PV_D0_h3_PE + Bu_constD0PV_D0_h1_PE)^2 - (Bu_constD0PV_D0_h3_PX + Bu_constD0PV_D0_h1_PX)^2 - (Bu_constD0PV_D0_h3_PY + Bu_constD0PV_D0_h1_PY)^2 - (Bu_constD0PV_D0_h3_PZ + Bu_constD0PV_D0_h1_PZ)^2)");
+    TCut KSVeto13(("Bu_constD0PV_D0_h3_ID*Bu_constD0PV_D0_h1_ID == -44521 && (" + m13 + " < 477 || " + m13 + " > 507)").c_str());
+    std::string m14("sqrt((Bu_constD0PV_D0_h4_PE + Bu_constD0PV_D0_h1_PE)^2 - (Bu_constD0PV_D0_h4_PX + Bu_constD0PV_D0_h1_PX)^2 - (Bu_constD0PV_D0_h4_PY + Bu_constD0PV_D0_h1_PY)^2 - (Bu_constD0PV_D0_h4_PZ + Bu_constD0PV_D0_h1_PZ)^2)");
+    TCut KSVeto14(("Bu_constD0PV_D0_h4_ID*Bu_constD0PV_D0_h1_ID == -44521 && (" + m14 + " < 477 || " + m14 + " > 507)").c_str());
+    std::string m24("sqrt((Bu_constD0PV_D0_h4_PE + Bu_constD0PV_D0_h2_PE)^2 - (Bu_constD0PV_D0_h4_PX + Bu_constD0PV_D0_h2_PX)^2 - (Bu_constD0PV_D0_h4_PY + Bu_constD0PV_D0_h2_PY)^2 - (Bu_constD0PV_D0_h4_PZ + Bu_constD0PV_D0_h2_PZ)^2)");
+    TCut KSVeto24(("Bu_constD0PV_D0_h4_ID*Bu_constD0PV_D0_h2_ID == -44521 && (" + m24 + " < 477 || " + m24 + " > 507)").c_str());
+    std::string m23("sqrt((Bu_constD0PV_D0_h3_PE + Bu_constD0PV_D0_h2_PE)^2 - (Bu_constD0PV_D0_h3_PX + Bu_constD0PV_D0_h2_PX)^2 - (Bu_constD0PV_D0_h3_PY + Bu_constD0PV_D0_h2_PY)^2 - (Bu_constD0PV_D0_h3_PZ + Bu_constD0PV_D0_h2_PZ)^2)");
+    TCut KSVeto23(("Bu_constD0PV_D0_h3_ID*Bu_constD0PV_D0_h2_ID == -44521 && (" + m23 + " < 477 || " + m23 + " > 507)").c_str());
+    return KSVeto13 || KSVeto14 || KSVeto24 || KSVeto23;
+  } else {
+    // Probably need to add Kpipipi in case someone needs to redo the background studies
+    throw std::invalid_argument("D mode " + m_DDecayMode + " not a valid decay");
+  }
+}
+
 TCut BaseCuts::GetCuts() const {
   TCut Cuts;
   if(m_BachelorCuts) {
@@ -101,7 +134,7 @@ TCut BaseCuts::GetCuts() const {
   if(m_BMassCut) {
     Cuts = Cuts && BMassCut();
   }
-  return Cuts;
+  return Cuts && FlightSignificanceCut() && KSVetoCut();
 }
 
 void BaseCuts::SetBMassName(const std::string &BMassName) {
